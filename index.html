@@ -7,6 +7,11 @@
   <body>
     <h1>DogFight</h1>
 
+    <!-- Canvas -->
+    <canvas id="myCanvas" width="150" height="150">
+      oh-nooo! Your browser does not support canvas! :,(
+    </canvas>
+    <!-- End of Canvas -->
     <!-- Socket.io -->
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
@@ -16,5 +21,12 @@
         socket.emit("my other event", {my: "data"})
       });
     </script>
+    <!-- End of Socket.io -->
+    <!-- Game Script -->
+    <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    </script>
+    <!-- End of Game Script -->
   </body>
 </html>
