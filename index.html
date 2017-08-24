@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DogFight</title>
+  </head>
+  <body>
+    <h1>DogFight</h1>
+
+    <!-- Socket.io -->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect();
+      socket.on("news", function(data){
+        console.log(data);
+        socket.emit("my other event", {my: "data"})
+      });
+    </script>
+
+    </script>
+
+    </script>
+  </body>
+</html>
