@@ -25,7 +25,29 @@
     <!-- Game Script -->
     <script>
     var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
+    var c = canvas.getContext("2d");
+    console.log("TEST");
+
+    var mouseX = 0;
+    var mouseY = 0;
+
+    function Player(x, y, name){
+      this.x = x;
+      this.y = y;
+      this.name = name;
+    }
+
+    var myPlayer = new Player()
+
+    function animate(){
+      window.addEventListener("mousemove", function(event){
+
+      })
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
     </script>
     <!-- End of Game Script -->
   </body>
