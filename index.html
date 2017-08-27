@@ -33,13 +33,21 @@
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
 
+     
 
-    function Player(x, y, name, vx, vy, health){
+      this.draw(){
+        c.beginPath();
+        c.arc(this.x, this.y, 10, 0, 2*Math.PI);
+        c.stroke();
+      }
+    }
+
+    function Player(x, y, name, xIncr, yIncr, health){
       this.x = x;
       this.y = y;
       this.name = name;
-      this.vx = vx;
-      this.vy= vy;
+      this.xIncr = xIncr;
+      this.vIncr= yIncr;
       this.health = health;
 
       this.update = function(){
@@ -49,18 +57,18 @@
             this.x -= vx;
           }
         }else if(this.x < mouseX){
-          if(mouseX - this.x > vx){
-            this.x += vx;
+          if(mouseX - this.x > xincr){
+            this.x += xIncr;
           }
         }
         //y movement calculation
          if(this.y > mouseY){
-          if(this.y - mouseY > vy){
-            this.y -= vy;
+          if(this.y - mouseY > yIncr){
+            this.y -= yIncr;
           }
         }else if(this.y < mouseY){
-          if(mouseY - this.y > vy){
-            this.y += vy;
+          if(mouseY - this.y > yIncr){
+            this.y += yIncr;
           }
         }
       }
