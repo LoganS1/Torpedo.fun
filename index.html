@@ -50,12 +50,12 @@
       this.vx = vx;
       this.vy = vy;
 
-      this.update(){
+      this.update = function(){
         this.x += vx;
         this.y += vy;
       }
 
-      this.draw(){
+      this.draw = function(){
         c.beginPath();
         c.arc(this.x, this.y, 10, 0, 2*Math.PI);
         c.stroke();
@@ -73,11 +73,11 @@
       this.update = function(){
         //x movement calculation
         if(this.x > mouseX){
-          if(this.x - mouseX > vx){
-            this.x -= vx;
+          if(this.x - mouseX > xIncr){
+            this.x -= xIncr;
           }
         }else if(this.x < mouseX){
-          if(mouseX - this.x > xincr){
+          if(mouseX - this.x > xIncr){
             this.x += xIncr;
           }
         }
@@ -100,7 +100,7 @@
       }
     }
 
-    var me = new Player(200,200, "logan", 5, 5, 10);
+    var me = new Player(200,200, "logan", 8, 8, 10);
     var mouseX = 0;
     var mouseY = 0;
 
