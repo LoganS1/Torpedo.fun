@@ -33,7 +33,16 @@
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
 
-     
+     function Bullet(x, y, vx, vy){
+      this.x = x;
+      this.y = y;
+      this.vx = vx;
+      this.vy = vy;
+
+      this.update(){
+        this.x += vx;
+        this.y += vy;
+      }
 
       this.draw(){
         c.beginPath();
