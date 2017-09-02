@@ -94,9 +94,14 @@
       }
 
       this.draw = function(){
+        this.rotation = Math.atan2(this.y - mouseY, this.x - mouseX);
+        c.save();
+        c.translate(this.x + 30/2, this.y + 10/2);
+        c.rotate(this.rotation);
+        c.translate(-this.x + 30/2, -this.y + 10/2)
+        c.fillStyle = "blue"
         c.fillRect(this.x, this.y, 30, 10);
-        c.fillStyle = "blue";
-        console.log("drawing me @" + this.x + " " + this.y)
+        c.restore();
       }
     }
 
