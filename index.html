@@ -27,16 +27,6 @@
       oh-nooo! Your browser does not support canvas! :'(
     </canvas>
     <!-- End of Canvas -->
-    <!-- Socket.io -->
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-      var socket = io.connect();
-      socket.on("news", function(data){
-        console.log(data);
-        socket.emit("my other event", {my: "data"})
-      });
-    </script>
-    <!-- End of Socket.io -->
     <!-- Game Script -->
     <script>
     var canvas = document.getElementById("myCanvas");
@@ -129,5 +119,15 @@
 
     </script>
     <!-- End of Game Script -->
+    <!-- Socket.io -->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect();
+      socket.on("news", function(data){
+        console.log(data);
+        socket.emit("my other event", {my: "data"})
+      });
+    </script>
+    <!-- End of Socket.io -->
   </body>
 </html>
