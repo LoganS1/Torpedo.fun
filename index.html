@@ -113,14 +113,12 @@
     }
 
     function drawCharacter(character){
-      console.log(character);
       c.save();
       c.translate(character.x + 30/2, character.y + 10/2);
       c.rotate(character.rotation);
       c.translate(-character.x + 30/2, -character.y + 10/2)
       c.fillStyle = "blue"
       c.fillRect(character.x, character.y, 30, 10);
-      console.log("character.x " + character.x + " character.y " + character.y);
       c.restore();
     }
 
@@ -164,7 +162,6 @@
     })
 
     socket.on("bullets", function(data){
-      console.log("recieved bullet array");
       bulletsArray = data.bullets;
     })
 

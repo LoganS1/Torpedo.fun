@@ -23,7 +23,6 @@ io.on("connection", function(socket){
 				characters.splice(i, 1);
 			}
 		}
-		console.log("Player Count: " + characters.length);
 		characters.push(data);
 		socket.emit("serverCharacters", {data: characters});
 	})
