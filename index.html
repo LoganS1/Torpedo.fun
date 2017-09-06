@@ -27,12 +27,27 @@
       oh-nooo! Your browser does not support canvas! :'(
     </canvas>
     <!-- End of Canvas -->
+    <!-- Socket.io -->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <!-- End of Socket.io -->
     <!-- Game Script -->
     <script>
+    var socket = io.connect();
     var canvas = document.getElementById("myCanvas");
     var c = canvas.getContext("2d");
     canvas.height = 1420;
     canvas.width = 1920;
+
+    function updateBullet(bullet){
+      bullet.x += vx;
+      bullet.y += vy;
+    }
+
+    function drawBullet(bullet){
+      c.beginPath();
+      c.arc(bullet.x, bullet.y, 10, 0, 2*Math.PI);
+      c.stroke();
+    }
 
      function Bullet(x, y, vx, vy){
       this.x = x;
@@ -59,6 +74,7 @@
       this.xIncr = xIncr;
       this.vIncr= yIncr;
       this.health = health;
+      this.id = Math.ceil(Math.random() * 10000);
 
       this.update = function(){
         //x movement calculation
@@ -81,10 +97,11 @@
             this.y += yIncr;
           }
         }
+
+        this.rotation = Math.atan2(this.y - mouseY, this.x - mouseX);
       }
 
       this.draw = function(){
-        this.rotation = Math.atan2(this.y - mouseY, this.x - mouseX);
         c.save();
         c.translate(this.x + 30/2, this.y + 10/2);
         c.rotate(this.rotation);
@@ -93,6 +110,18 @@
         c.fillRect(this.x, this.y, 30, 10);
         c.restore();
       }
+    }
+
+    function drawCharacter(character){
+      console.log(character);
+      c.save();
+      c.translate(character.x + 30/2, character.y + 10/2);
+      c.rotate(character.rotation);
+      c.translate(-character.x + 30/2, -character.y + 10/2)
+      c.fillStyle = "blue"
+      c.fillRect(character.x, character.y, 30, 10);
+      console.log("character.x " + character.x + " character.y " + character.y);
+      c.restore();
     }
 
     var me = new Player(200,200, "logan", 8, 8, 10);
@@ -107,7 +136,7 @@
 
       this.newBullet = new Bullet(me.x, me.y, this.vx, this.vy);
       console.log(newBullet)
-      bulletsArray.push(this.newBullet);
+      socket.emit("newBullet", {bullet: newBullet});
     })
 
     var mouseX = 0;
@@ -121,28 +150,34 @@
 
     function loop(){
       requestAnimationFrame(loop);
-      c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      //c.clearRect(0, 0, window.innerWidth, window.innerHeight);
       me.update();
-      me.draw();
       for(var i = 0; i < bulletsArray.length; i++){
-        bulletsArray[i].update();
-        bulletsArray[i].draw();
+        updateBullet(bulletsArray[i]);
+        drawBullet(bulletsArray[i]);
       }
+        socket.emit("character", {character: me});
     }
 
+    socket.on("connection", function(data){
+      console.log(data);
+    })
+
+    socket.on("bullets", function(data){
+      console.log("recieved bullet array");
+      bulletsArray = data.bullets;
+    })
+
+    socket.on("serverCharacters", function(data){
+      c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for(var i = data.data.length - 1; i > 0; i--){
+      drawCharacter(data.data[i].character);
+
+      }
+    })
     loop();
 
     </script>
     <!-- End of Game Script -->
-    <!-- Socket.io -->
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-      var socket = io.connect();
-      socket.on("news", function(data){
-        console.log(data);
-        socket.emit("my other event", {my: "data"})
-      });
-    </script>
-    <!-- End of Socket.io -->
   </body>
 </html>
