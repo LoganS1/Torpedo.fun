@@ -27,15 +27,12 @@ io.on("connection", function(socket){
 		socket.emit("serverCharacters", {data: characters});
 	})
 	socket.on("newBullet", function(bullet){
-		console.log("new Bullet!");
-		console.log(bullets);
 		bullets.push(bullet);
 		// for(var x = bullets.length; x > 0; x--){
 		// 	if(Math.abs(bullets[x].bullet.x) > 2000 || Math.abs(bullets[x].y) > 2000){
 		// 		bullets[x].splice(x, 0);
 		// 	}
 		// }
-		console.log("sending bullets array");
-		socket.emit("bullets", {"bullets": bullets});
+		io.sockets.emit("bullets", {"bullets": bullet});
 	})
 })

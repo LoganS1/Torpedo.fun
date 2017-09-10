@@ -133,7 +133,6 @@
       this.vy = (this.dy / this.mag) * speed;
 
       this.newBullet = new Bullet(me.x, me.y, this.vx, this.vy);
-      console.log(newBullet)
       socket.emit("newBullet", {bullet: newBullet});
     })
 
@@ -151,8 +150,8 @@
       //c.clearRect(0, 0, window.innerWidth, window.innerHeight);
       me.update();
       for(var i = 0; i < bulletsArray.length; i++){
-        updateBullet(bulletsArray[i]);
-        drawBullet(bulletsArray[i]);
+        bulletsArray[i].update();
+        bulletsArray[i].draw();
       }
         socket.emit("character", {character: me});
     }
@@ -162,14 +161,15 @@
     })
 
     socket.on("bullets", function(data){
-      bulletsArray = data.bullets;
+      this.bullet = data.bullets.bullet;
+      this.bullet = new Bullet(this.bullet.x, this.bullet.y, this.bullet.vx, this.bullet.vy);
+      bulletsArray.push(this.bullet);
     })
 
     socket.on("serverCharacters", function(data){
       c.clearRect(0, 0, window.innerWidth, window.innerHeight);
       for(var i = data.data.length - 1; i > 0; i--){
       drawCharacter(data.data[i].character);
-
       }
     })
     loop();
