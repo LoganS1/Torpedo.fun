@@ -45,7 +45,7 @@
 
     function drawBullet(bullet){
       c.beginPath();
-      c.arc(bullet.x, bullet.y, 10, 0, 2*Math.PI);
+      c.arc(bullet.x, bullet.y, 2, 0, 2*Math.PI);
       c.stroke();
     }
 
@@ -62,7 +62,7 @@
 
       this.draw = function(){
         c.beginPath();
-        c.arc(this.x, this.y, 10, 0, 2*Math.PI);
+        c.arc(this.x, this.y, 2, 0, 2*Math.PI);
         c.stroke();
       }
     }
@@ -139,6 +139,7 @@
     var mouseX = 0;
     var mouseY = 0;
     var bulletsArray = [];
+    var charactersArray = [];
 
     canvas.addEventListener("mousemove", function(e){
         mouseX = Math.ceil(e.x);
@@ -168,12 +169,14 @@
 
     socket.on("serverCharacters", function(data){
       c.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      for(var i = data.data.length - 1; i > 0; i--){
-      drawCharacter(data.data[i].character);
+      charactersArray = data.data;
+      console.log(charactersArray);
+      for(var i = data.data.length - 1; i >= 0; i--){
+        drawCharacter(data.data[i].character);
       }
     })
     loop();
-
+//bu.x >= ch.x && bu.x <= ch.x + 10 && bu.y >= ch.y && by.y <= ch.y + 30
     </script>
     <!-- End of Game Script -->
   </body>
