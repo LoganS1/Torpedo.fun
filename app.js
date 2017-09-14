@@ -28,11 +28,22 @@ io.on("connection", function(socket){
 	})
 	socket.on("newBullet", function(bullet){
 		bullets.push(bullet);
-		// for(var x = bullets.length; x > 0; x--){
+		// for(var x = bullets.length - 1; x >= 0; x--){
 		// 	if(Math.abs(bullets[x].bullet.x) > 2000 || Math.abs(bullets[x].y) > 2000){
 		// 		bullets[x].splice(x, 0);
 		// 	}
 		// }
 		io.sockets.emit("bullets", {"bullets": bullet});
+	})
+	socket.on("death", function(name){
+		console.log("Recieved Death");
+		var id = name.name;
+		io.sockets.emit("death", {name: id});
+		for(var x = characters.length - 1; x >= 0; x--){
+			var ch = characters[x];
+			if(ch.id === id){
+				characters.splice(x, 1);
+			}
+		}
 	})
 })
