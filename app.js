@@ -11,6 +11,8 @@ app.get("/", function(req, res){
 	res.sendFile(__dirname + "/index.html");
 })
 
+app.use(express.static('public'))
+
 var characters = [];
 var bullets = [];
 
