@@ -7,24 +7,28 @@ function Bullet(x, y, vx, vy){
  this.update = function(){
    this.x += vx;
    this.y += vy;
-   for(var x = charactersArray.length - 1; x >= 0; x--){
-     var ch = charactersArray[x].character;
+   //for(var x = charactersArray.length - 1; x >= 0; x--){
+     //var ch = charactersArray[x].character;
      //console.log(ch);
      //console.log("(" + ch.x + ", " + ch.y + "), (" + this.x + ", " + this.y + ")")
-     if(this.x >= ch.x && this.x <= ch.x + 30 && this.y >= ch.y && this.y <= ch.y + 50){
+     if(this.x >= me.x && this.x <= me.x + 50 && this.y >= me.y && this.y <= me.y + 30){
        // socket.emit("death", {name: ch.id});
-       if(me.id === ch.id){
+       me.health -= 2;
+       if(me.health <= 0){
+         //me.deaths += 1;
          me.x = 0;
          me.y = 0;
+         me.health = 10;
        }
-       console.log(ch.name + "Died!");
      }
-   }
+   //}
  }
 
  this.draw = function(){
    c.beginPath();
    c.arc(this.x, this.y, 5, 0, 2*Math.PI);
+   c.fillStyle = "black";
+   c.fill();
    c.stroke();
  }
 }

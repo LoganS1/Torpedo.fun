@@ -12,14 +12,17 @@ window.addEventListener("click", function(){
   this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
   this.vx = (this.dx / this.mag) * speed;
   this.vy = (this.dy / this.mag) * speed;
-
-  this.newBullet = new Bullet(me.x, me.y, this.vx, this.vy);
+  if(me.x + 50/2 > mouseX){
+    this.newBullet = new Bullet(me.x - 20, me.y + 30/2, this.vx, this.vy);
+  }else if(me.x + 50/3 < mouseX){
+    this.newBullet = new Bullet(me.x + 70, me.y + 30/2, this.vx, this.vy);
+  }
   socket.emit("newBullet", {bullet: newBullet});
 })
 
 canvas.addEventListener("mousemove", function(e){
-    mouseX = Math.ceil(e.x);
-    mouseY = Math.ceil(e.y);
+    mouseX = e.x;
+    mouseY = e.y;
   })
 
 function loop(){
