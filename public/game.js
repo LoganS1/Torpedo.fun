@@ -1,5 +1,7 @@
-var me = new Player(200,200, "logan", 8, 8, 10);
-
+var name = prompt("What name do you want?");
+var me = new Player(200,200, name, 8, 8, 10);
+var antiCheatDeaths = 0;
+var antiCheatHealth = 10;
 var mouseX = 0;
 var mouseY = 0;
 var bulletsArray = [];
@@ -28,7 +30,7 @@ canvas.addEventListener("mousemove", function(e){
 function loop(){
   requestAnimationFrame(loop);
   me.update();
-
+  drawScore();
   for(var i = 0; i < bulletsArray.length; i++){
     bulletsArray[i].update();
     bulletsArray[i].draw();

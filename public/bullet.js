@@ -15,7 +15,7 @@ function Bullet(x, y, vx, vy){
        // socket.emit("death", {name: ch.id});
        me.health -= 2;
        if(me.health <= 0){
-         //me.deaths += 1;
+         me.deaths += 1;
          me.x = 0;
          me.y = 0;
          me.health = 10;
