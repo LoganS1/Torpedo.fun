@@ -14,7 +14,7 @@ function drawScore(){
   for(var t = scoreArray.length - 1; t >= 0; t--){
     this.currObj = scoreArray[t];
     c.font = "30px Arial";
-    c.fillText(this.currObj.name + ": " + "Health: " + this.currObj.health + " / Deaths: " + this.currObj.deaths, 1400, this.y);
+    c.fillText(this.currObj.name + ": " + "Health: " + this.currObj.health + " / Deaths: " + this.currObj.deaths, 10, this.y);
     this.y += 30;
   }
 }
