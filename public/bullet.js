@@ -1,8 +1,9 @@
-function Bullet(x, y, vx, vy){
+function Bullet(x, y, vx, vy, owner){
  this.x = x;
  this.y = y;
  this.vx = vx;
  this.vy = vy;
+ this.owner = owner;
 
  this.update = function(){
    this.x += vx;
@@ -15,6 +16,7 @@ function Bullet(x, y, vx, vy){
        // socket.emit("death", {name: ch.id});
        me.health -= 2;
        if(me.health <= 0){
+         socket.emit("death", {id: me.id, owner: this.owner});
          me.deaths += 1;
          me.x = 0;
          me.y = 0;

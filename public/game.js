@@ -8,16 +8,16 @@ var bulletsArray = [];
 var charactersArray = [];
 
 window.addEventListener("click", function(){
-  this.speed = 20;
+  this.speed = 25;
   this.dx = mouseX - me.x;
   this.dy = mouseY - me.y;
   this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
   this.vx = (this.dx / this.mag) * speed;
   this.vy = (this.dy / this.mag) * speed;
   if(me.x + 50/2 > mouseX){
-    this.newBullet = new Bullet(me.x - 20, me.y + 30/2, this.vx, this.vy);
+    this.newBullet = new Bullet(me.x - 20, me.y + 30/2, this.vx, this.vy, me.id);
   }else if(me.x + 50/3 < mouseX){
-    this.newBullet = new Bullet(me.x + 70, me.y + 30/2, this.vx, this.vy);
+    this.newBullet = new Bullet(me.x + 70, me.y + 30/2, this.vx, this.vy, me.id);
   }
   socket.emit("newBullet", {bullet: newBullet});
 })

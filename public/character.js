@@ -7,6 +7,7 @@ function Player(x, y, name, xIncr, yIncr, health){
   this.yIncr= yIncr;
   this.health = health;
   this.deaths = 0;
+  this.kills = 0;
   this.id = Math.ceil(Math.random() * 10000);
 
   this.update = function(){

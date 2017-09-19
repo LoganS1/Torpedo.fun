@@ -38,9 +38,10 @@ io.on("connection", function(socket){
 		io.sockets.emit("bullets", {"bullets": bullet});
 	})
 	socket.on("death", function(name){
-		console.log("Recieved Death");
-		var id = name.name;
-		io.sockets.emit("death", {name: id});
+
+		var id = name.id;
+		var owner = name.owner;
+		io.sockets.emit("death", {name: id, owner: owner});
 		for(var x = characters.length - 1; x >= 0; x--){
 			var ch = characters[x];
 			if(ch.id === id){
@@ -49,3 +50,7 @@ io.on("connection", function(socket){
 		}
 	})
 })
+
+var characterRemoval = setInterval(function(){
+	characters = [];
+}, 60000)

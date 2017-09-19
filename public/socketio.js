@@ -6,7 +6,7 @@
 
   socket.on("bullets", function(data){
     this.bullet = data.bullets.bullet;
-    this.bullet = new Bullet(this.bullet.x, this.bullet.y, this.bullet.vx, this.bullet.vy);
+    this.bullet = new Bullet(this.bullet.x, this.bullet.y, this.bullet.vx, this.bullet.vy, this.bullet.owner);
     bulletsArray.push(this.bullet);
   })
 
@@ -21,6 +21,10 @@
   socket.on("death", function(data){
     console.log("Recieved Death");
     var id = data.name;
+    var owner = data.owner;
+    if(me.id === owner){
+      me.kills += 1;
+    }
     for(var x = charactersArray.length - 1; x >= 0; x--){
       if(charactersArray[x].id === id){
         charactersArray.splice(x, 1);
