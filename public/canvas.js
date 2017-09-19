@@ -13,7 +13,9 @@ function drawScore(){
 
   for(var t = scoreArray.length - 1; t >= 0; t--){
     this.currObj = scoreArray[t];
+    c.beginPath();
     c.font = "30px Arial";
+    c.fillStyle = "black";
     c.fillText(this.currObj.name + ": " + "Health: " + this.currObj.health + " / Deaths: " + this.currObj.deaths, 10, this.y);
     this.y += 30;
   }
