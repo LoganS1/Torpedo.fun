@@ -35,7 +35,7 @@ function loop(){
     bulletsArray[i].update();
     bulletsArray[i].draw();
     for(var p = bulletsArray.length - 1; p >= 0; p--){
-      if(bulletsArray[p].x > 2000 || bulletsArray[p].y > 2000){
+      if(bulletsArray[p].x < -2000 || bulletsArray[p].y < -2000 || bulletsArray[p].x > 2000 || bulletsArray[p].y > 2000){
         bulletsArray.splice(p, 1);
       }
     }
