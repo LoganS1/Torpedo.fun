@@ -1,7 +1,7 @@
 var canvas = document.getElementById("myCanvas");
 var c = canvas.getContext("2d");
-canvas.height = 1420;
-canvas.width = 1920;
+canvas.height = 800;
+canvas.width = 800;
 
 function drawScore(){
   this.y = 30;
@@ -15,7 +15,7 @@ function drawScore(){
     this.currObj = scoreArray[t];
     console.log
     c.beginPath();
-    c.font = "30px Arial";
+    c.font = "20px Arial";
     c.fillStyle = "black";
     c.fillText(this.currObj.name + " " + this.currObj.deaths + " Deaths, " + this.currObj.kills + " Kills!", 10, this.y);
     c.textAlign = "center";

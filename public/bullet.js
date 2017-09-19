@@ -12,7 +12,7 @@ function Bullet(x, y, vx, vy, owner){
      //var ch = charactersArray[x].character;
      //console.log(ch);
      //console.log("(" + ch.x + ", " + ch.y + "), (" + this.x + ", " + this.y + ")")
-     if(this.x >= me.x && this.x <= me.x + 50 && this.y >= me.y && this.y <= me.y + 30){
+     if(this.x >= me.x && this.x <= me.x + 25 && this.y >= me.y && this.y <= me.y + 15){
        // socket.emit("death", {name: ch.id});
        me.health -= 2;
        if(me.health <= 0){
@@ -28,19 +28,19 @@ function Bullet(x, y, vx, vy, owner){
 
  this.draw = function(){
    c.beginPath();
-   c.arc(this.x, this.y, 5, 0, 2*Math.PI);
+   c.arc(this.x, this.y, 3, 0, 2*Math.PI);
    c.fillStyle = "black";
    c.fill();
    c.stroke();
 
    c.beginPath();
-   c.arc(this.x - this.vx, this.y - this.vy, 3, 0, 2*Math.PI);
+   c.arc(this.x - this.vx, this.y - this.vy, 2, 0, 2*Math.PI);
    c.fillStyle = "grey";
    c.fill();
    c.stroke();
 
    c.beginPath();
-   c.arc(this.x - this.vx * 2, this.y - this.vy * 2, 1, 0, 2*Math.PI);
+   c.arc(this.x - this.vx * 2, this.y - this.vy * 1, 1, 0, 2*Math.PI);
    c.fillStyle = "grey";
    c.fill();
    c.stroke();
