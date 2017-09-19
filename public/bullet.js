@@ -30,5 +30,17 @@ function Bullet(x, y, vx, vy){
    c.fillStyle = "black";
    c.fill();
    c.stroke();
+
+   c.beginPath();
+   c.arc(this.x - this.vx, this.y - this.vy, 3, 0, 2*Math.PI);
+   c.fillStyle = "grey";
+   c.fill();
+   c.stroke();
+
+   c.beginPath();
+   c.arc(this.x - this.vx * 2, this.y - this.vy * 2, 1, 0, 2*Math.PI);
+   c.fillStyle = "grey";
+   c.fill();
+   c.stroke();
  }
 }
