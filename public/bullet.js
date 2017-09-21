@@ -32,17 +32,5 @@ function Bullet(x, y, vx, vy, owner){
    c.fillStyle = "black";
    c.fill();
    c.stroke();
-
-   c.beginPath();
-   c.arc(this.x - this.vx, this.y - this.vy, 2, 0, 2*Math.PI);
-   c.fillStyle = "grey";
-   c.fill();
-   c.stroke();
-
-   c.beginPath();
-   c.arc(this.x - this.vx * 2, this.y - this.vy * 1, 1, 0, 2*Math.PI);
-   c.fillStyle = "grey";
-   c.fill();
-   c.stroke();
  }
 }

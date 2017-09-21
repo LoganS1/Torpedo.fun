@@ -9,20 +9,9 @@ function Player(x, y, name, xIncr, yIncr, health){
   this.deaths = 0;
   this.kills = 0;
   this.id = Math.ceil(Math.random() * 10000);
-
+  this.ammo = 10;
   this.update = function(){
-    if(this.health > antiCheatHealth){
-      this.health = antiCheatHealth;
-      this.deaths+=1;
-      console.warn("Cheater! +1 Death for being bad!");
-    }
-    if(this.deaths < antiCheatDeaths){
-      this.deaths = antiCheatDeaths;
-      this.deaths+=1;
-      console.warn("Cheater! +1 Death for being bad!");
-    }
-    antiCheathHealth = this.health;
-    antiCheatDeaths = this.deaths;
+
 
     if(this.x - 25 < mouseX){
       this.x += this.xIncr;
