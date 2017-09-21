@@ -26,7 +26,9 @@ function Player(x, y, name, xIncr, yIncr, health){
     if(this.y + 50 > mouseY){
       this.y -= this.yIncr;
     }
-      this.rotation = Math.atan2(this.y - mouseY, this.x - mouseX);
+    this.rotation = Math.atan2(this.y - mouseY, this.x - mouseX);
+
+    socket.emit("character", {character: me});
   }
 }
 

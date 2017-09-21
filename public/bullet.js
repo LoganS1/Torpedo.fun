@@ -34,3 +34,21 @@ function Bullet(x, y, vx, vy, owner){
    c.stroke();
  }
 }
+
+function addAmmo(){
+  if(me.ammo < 10){
+    me.ammo += 0.02;
+  }
+}
+
+function loopBullets(){
+  for(var i = 0; i < bulletsArray.length; i++){
+    bulletsArray[i].update();
+    bulletsArray[i].draw();
+    for(var p = bulletsArray.length - 1; p >= 0; p--){
+      if(bulletsArray[p].x < -2000 || bulletsArray[p].y < -2000 || bulletsArray[p].x > 2000 || bulletsArray[p].y > 2000){
+        bulletsArray.splice(p, 1);
+      }
+    }
+  }
+}

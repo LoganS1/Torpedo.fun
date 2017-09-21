@@ -49,6 +49,9 @@ io.on("connection", function(socket){
 			}
 		}
 	})
+	socket.on("healthBubble", function(data){
+		io.sockets.emit("healthBubble", data);
+	});
 })
 
 var characterRemoval = setInterval(function(){

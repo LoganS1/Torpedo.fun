@@ -26,24 +26,25 @@ canvas.addEventListener("mousemove", function(e){
   })
 
 function loop(){
-  if(me.ammo < 10){
-    me.ammo += 0.02;
-  }
-
   requestAnimationFrame(loop);
-  me.update();
+  addAmmo();
+  loopHealthBubbles();
+  healthBubbleCollisionDetection()
+  loopBullets();
   drawScore();
-  for(var i = 0; i < bulletsArray.length; i++){
-    bulletsArray[i].update();
-    bulletsArray[i].draw();
-    for(var p = bulletsArray.length - 1; p >= 0; p--){
-      if(bulletsArray[p].x < -2000 || bulletsArray[p].y < -2000 || bulletsArray[p].x > 2000 || bulletsArray[p].y > 2000){
-        bulletsArray.splice(p, 1);
-      }
-    }
-  }
-
-    socket.emit("character", {character: me});
+  me.update();
 }
 
 loop();
+
+var healthBubbleTimer = setInterval(function(){
+
+  if(healthBubbles.length < 5){
+    this.healthBubble = {
+      x : Math.ceil(Math.random()* 700) + 50,
+      y : Math.ceil(Math.random()* 700) + 50
+    }
+    healthBubbles.push(this.healthBubble);
+    socket.emit("healthBubble", {data: healthBubbles});
+  }
+}, 10000)

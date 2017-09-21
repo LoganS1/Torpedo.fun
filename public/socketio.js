@@ -35,3 +35,8 @@
       }
     }
   })
+
+  socket.on("healthBubble", function(data){
+    console.log(data);
+    healthBubbles = data.data;
+  })
