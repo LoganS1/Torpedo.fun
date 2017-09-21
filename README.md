@@ -1,3 +1,3 @@
-DogFight
+torpedoed.io
 ----------------------
-A simple io clone of the famous plane dogfighting games.
+An io game with submarines played like the old 2d dogfighting games with planes
