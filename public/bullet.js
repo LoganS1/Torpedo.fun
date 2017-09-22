@@ -21,6 +21,7 @@ function Bullet(x, y, vx, vy, owner){
          me.x = 0;
          me.y = 0;
          me.health = 10;
+         me.ammo = 10;
        }
      }
    //}
@@ -33,12 +34,6 @@ function Bullet(x, y, vx, vy, owner){
    c.fill();
    c.stroke();
  }
-}
-
-function addAmmo(){
-  if(me.ammo < 10){
-    me.ammo += 0.02;
-  }
 }
 
 function loopBullets(){

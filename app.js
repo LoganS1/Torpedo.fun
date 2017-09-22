@@ -52,6 +52,12 @@ io.on("connection", function(socket){
 	socket.on("healthBubble", function(data){
 		io.sockets.emit("healthBubble", data);
 	});
+	socket.on("ammoBubble", function(data){
+		io.sockets.emit("ammoBubble", data);
+	});
+	socket.on(" speedBubble", function(data){
+		io.sockets.emit(" speedBubble", data);
+	});
 })
 
 var characterRemoval = setInterval(function(){

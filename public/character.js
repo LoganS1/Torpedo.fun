@@ -3,6 +3,8 @@ function Player(x, y, name, xIncr, yIncr, health){
   this.y = y;
   this.color = "rgb(" + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ")";
   this.name = name;
+  this.origXIncr = xIncr;
+  this.origYIncr = yIncr;
   this.xIncr = xIncr;
   this.yIncr= yIncr;
   this.health = health;
@@ -10,8 +12,16 @@ function Player(x, y, name, xIncr, yIncr, health){
   this.kills = 0;
   this.id = Math.ceil(Math.random() * 10000);
   this.ammo = 10;
-  this.update = function(){
+  this.speedCount = 0;
 
+  this.update = function(){
+    if(this.speedCount > 0){
+      this.xIncr = this.origXIncr + 5;
+      this.yIncr = this.origYIncr + 5;
+    }else{
+      this.xIncr = this.origXIncr;
+      this.yIncr = this.origYIncr;
+    }
 
     if(this.x - 25 < mouseX){
       this.x += this.xIncr;
