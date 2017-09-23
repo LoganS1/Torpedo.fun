@@ -71,7 +71,7 @@ var speedBubbleTimer = setInterval(function(){
     speedBubbles.push(this.speedBubble);
     socket.emit("speedBubble", {data: speedBubbles});
   }
-}, 5000)
+}, 10000)
 
 var speedDecreaser = setInterval(function(){
   if(me.speedCount > 0){
