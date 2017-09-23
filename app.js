@@ -56,7 +56,7 @@ io.on("connection", function(socket){
 		io.sockets.emit("ammoBubble", data);
 	});
 	socket.on(" speedBubble", function(data){
-		io.sockets.emit(" speedBubble", data);
+		io.sockets.emit("speedBubble", data);
 	});
 })
 
