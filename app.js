@@ -154,7 +154,7 @@ function bulletCollisionDetection(){
 /*----------Socket.io----------*/
 //emits positions to all clients
 function emitArrays(){
-	io.sockets.emit("data", {characters: characters, bullets: bullets});
+	io.sockets.emit("data", {characters: characters, bullets: bullets, bubbles: bubbles});
 };
 
 //socket.io connections
