@@ -87,7 +87,7 @@ function characterCollisionDetection(){
 
 //emits positions to all clients
 function emitArrays(){
-	io.sockets.emit("positions", {characters: characters, bullets: bullets});
+	io.sockets.emit("data", {characters: characters, bullets: bullets});
 };
 
 //socket.io connections
