@@ -11,9 +11,9 @@ function drawScore(){
     scoreArray.push({x: this.char.x, y: this.char.y, name: this.char.name, health: this.char.health, deaths: this.char.deaths, kills: this.char.kills, ammo: this.char.ammo});
   }
 
-  for(var t = scoreArray.length - 1; t >= 0; t--){
-    this.currObj = scoreArray[t];
-    console.log
+  for(var t = characters.length - 1; t >= 0; t--){
+    this.currObj = characters[t];
+
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";

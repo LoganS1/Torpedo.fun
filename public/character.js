@@ -35,10 +35,10 @@ function drawCharacters(){
     this.currChar = characters[i];
     c.save();
     c.translate(this.currChar.x + characterDimensions.width/2, this.currChar.y + characterDimensions.height/2);
-    //c.rotate(this.currChar.rotation);
+    c.rotate(this.currChar.rotation);
     c.translate(-(this.currChar.x + characterDimensions.width/2), - (this.currChar.y + characterDimensions.height/2))
     c.fillStyle = this.currChar.color;
-    c.fillRect(this.currChar.x, this.currChar.y, 25, 15);
+    c.fillRect(this.currChar.x, this.currChar.y, characterDimensions.width, characterDimensions.height);
     c.restore();
   }
 }

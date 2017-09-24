@@ -33,7 +33,7 @@ var characterDimensions = {
 	height: 15,
 	width: 25
 }
-var consoleOutput = "Players Connected: \n"
+
 //loop that updates and sends out positions
 var loop = setInterval(function(){
 	updateCharacters();
@@ -48,7 +48,15 @@ var loop = setInterval(function(){
 var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );		if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
 
 function updateConsole(){
-	console.log("Players Connected: " + characters.length + " - FPS: " + fps.getFPS());
+	console.log("Players Connected: " + characters.length + "\n FPS: " + fps.getFPS() + "\n" + createPlayerList());
+}
+
+function createPlayerList(){
+	this.toReturn = "";
+	for(var y = characters.length - 1; y >= 0; y--){
+		this.toReturn += (y + ". "+ characters[y].name + "\n");
+	}
+	return this.toReturn;
 }
 
 /*----------Characters----------*/
@@ -69,7 +77,7 @@ function updateCharacters(){
     if(this.currChar.y + 50 > this.currChar.mouseY){
       this.currChar.y -= this.currChar.yIncr;
     }
-    this.currChar.rotation = Math.atan2(this.currChar.y - this.currChar.mouseY, this.currChar.x - this.currChar.mouseX);
+    this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY, (this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
 	}
 }
 
@@ -134,6 +142,9 @@ function updateBullets(){
 	for(var x = bullets.length - 1; x >= 0; x--){
 		bullets[x].x += bullets[x].xIncr;
 		bullets[x].y += bullets[x].yIncr;
+		if(bullets[x].x > 2000 || bullets[x].x < -2000 || bullets[x].y > 2000 || bullets[x].y < -2000){
+			bullets.splice(x, 1);
+		}
 	}
 }
 
@@ -153,6 +164,8 @@ function bulletCollisionDetection(){
 				//test to see if player is dead
 				if(this.char.health <= 1){
 					//reset characters statistics
+					this.char.x = 0;
+					this.char.y = 0;
 					this.char.health = 10;
 					this.char.deaths += 1;
 					this.char.ammo = 10;
@@ -192,6 +205,10 @@ io.on("connection", function(socket){
 			}
 		}
 		if(!this.found){
+			console.log(data.name + " joined the game!");
+			if(data.name === ""){
+				data.name = "torpedoed.io";
+			}
 			characters.push({
 				x: Math.ceil(Math.random() * (canvasDimensions.width - 1)),
 				y: Math.ceil(Math.random() * (canvasDimensions.width - 1)),
@@ -201,6 +218,7 @@ io.on("connection", function(socket){
 				yIncr: 4,
 				deaths: 0,
 				kills: 0,
+				health: 10,
 				id: data.id,
 				ammo: 10,
 				rotation: 0,
@@ -216,19 +234,20 @@ io.on("connection", function(socket){
 	socket.on("bullet", function(data){
 		for(var y = characters.length - 1; y >= 0; y--){
 			if(characters[y].id == data.owner){
-				this.speed = 0;
+				this.speed = 15;
 			  this.dx = characters[y].mouseX - (characters[y].x + characterDimensions.width / 2);
 			  this.dy = characters[y].mouseY - (characters[y].y + characterDimensions.height / 2);
 			  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
 			  this.vx = (this.dx / this.mag) * this.speed;
 			  this.vy = (this.dy / this.mag) * this.speed;
-				this.x = characters[y].x + this.vx;
-				this.y = characters[y].y + this.vy;
+				this.x = (characters[y].x + characterDimensions.width / 2) + this.vx;
+				this.y = (characters[y].y + characterDimensions.height / 2) + this.vy;
 				bullets.push({
 					x: this.x,
 					y: this.y,
 					xIncr: this.vx,
 					yIncr: this.vy,
+					damage: 2,
 					owner: data.owner
 				});
 			}
@@ -240,6 +259,7 @@ var heartBeatTester = setInterval(function(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		characters[x].heartbeat -= 1;
 		if(characters[x].heartbeat <= 0){
+			console.log(characters[x].name + " left the game!");
 			characters.splice(x, 1);
 		}
 	}
