@@ -191,7 +191,6 @@ function emitArrays(){
 
 //socket.io connections
 io.on("connection", function(socket){
-	socket.emit("connection", {successfully: "connected!"});
 
 	//Receive Data
 	socket.on("data", function(data){
@@ -205,8 +204,7 @@ io.on("connection", function(socket){
 			}
 		}
 		if(!this.found){
-			console.log(data.name + " joined the game!");
-			if(data.name === ""){
+			if(data.name === "" || data.name.length > 12){
 				data.name = "torpedoed.io";
 			}
 			characters.push({
