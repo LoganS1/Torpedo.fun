@@ -1,24 +1,24 @@
 var name = prompt("What name do you want?");
-var me = new Player(200,200, name, 4, 4, 10);
+var id = Math.ceil(Math.random() * 100000000);
 var mouseX = 0;
 var mouseY = 0;
 var bullets = [];
 var characters = [];
 var bubbles = [];
 
-canvas.addEventListener("click", function(){
-  this.speed = 15;
-  this.dx = mouseX - me.x;
-  this.dy = mouseY - me.y;
-  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
-  this.vx = (this.dx / this.mag) * this.speed;
-  this.vy = (this.dy / this.mag) * this.speed;
-  if(me.ammo >= 1){
-    this.newBullet = new Bullet(me.x + this.vx, me.y + this.vy, this.vx, this.vy, me.id);
-    socket.emit("bullet", {bullet: this.newBullet});
-    me.ammo -= 1;
-  }
+//setting up dimensions to be used in the math of colision detection later
+var canvasDimensions = {
+	height: 800,
+	width: 800
+}
 
+var characterDimensions = {
+	height: 15,
+	width: 25
+}
+
+canvas.addEventListener("click", function(){
+  socket.emit("bullet", {owner: id, x: mouseX, y: mouseY});
 })
 
 canvas.addEventListener("mousemove", function(e){
@@ -28,9 +28,10 @@ canvas.addEventListener("mousemove", function(e){
 
 function loop(){
   requestAnimationFrame(loop);
-  loopBullets();
+  c.clearRect(0, 0, canvasDimensions.width, canvasDimensions.height);
+  drawBullets();
+  drawCharacters();
   drawScore();
-  me.update();
 }
 
 loop();

@@ -33,22 +33,43 @@ var characterDimensions = {
 	height: 15,
 	width: 25
 }
-
+var consoleOutput = "Players Connected: \n"
 //loop that updates and sends out positions
 var loop = setInterval(function(){
 	updateCharacters();
 	updateBullets();
 	characterCollisionDetection();
 	bulletCollisionDetection();
+	updateConsole();
 	//bubbleCollisionDetection();
 	emitArrays();
 }, 1000/60);
 
+var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );		if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
+
+function updateConsole(){
+	console.log("Players Connected: " + characters.length + " - FPS: " + fps.getFPS());
+}
+
 /*----------Characters----------*/
 function updateCharacters(){
 	for(var x = characters.length - 1; x >= 0; x--){
-		characters[x].x += characters[x].xIncr;
-		characters[x].y += characters[x].yIncr;
+		this.currChar = characters[x];
+
+		if(this.currChar.x - 25 < this.currChar.mouseX){
+      this.currChar.x += this.currChar.xIncr;
+    }
+    if(this.currChar.x + 50 > this.currChar.mouseX){
+      this.currChar.x -= this.currChar.xIncr
+    }
+
+    if(this.currChar.y - 25 < this.currChar.mouseY){
+      this.currChar.y += this.currChar.yIncr;
+    }
+    if(this.currChar.y + 50 > this.currChar.mouseY){
+      this.currChar.y -= this.currChar.yIncr;
+    }
+    this.currChar.rotation = Math.atan2(this.currChar.y - this.currChar.mouseY, this.currChar.x - this.currChar.mouseX);
 	}
 }
 
@@ -99,9 +120,9 @@ function bubbleCollisionDetection(){
 		for(var i = bubbles.length - 1; i >= 0; i--){
 			this.char = characters[x];
 			this.bubble = bubbles[i];
-			//running through arrays comparing each bullet to each character
+			//running through arrays comparing each bubble to each character
 			if(this.bubble.x >= this.char.x && this.bubble.x <= this.char.x + characterDimensions.width && this.bubble.y >= this.char.y && this.bubble.y <= this.char.y + characterDimensions.height){
-				//when a bullet is found inside a character
+				//when a bubbele is found inside a character
 
 			}
 		}
@@ -135,8 +156,6 @@ function bulletCollisionDetection(){
 					this.char.health = 10;
 					this.char.deaths += 1;
 					this.char.ammo = 10;
-					this.char.x = 0;
-					this.char.y = 0;
 					for(var y = characters.length - 1; y >= 0; y--){
 						//find bullets owner and award the kill
 						if(characters[y].id === this.bull.owner){
@@ -160,15 +179,68 @@ function emitArrays(){
 //socket.io connections
 io.on("connection", function(socket){
 	socket.emit("connection", {successfully: "connected!"});
-	console.log("Someone has connected!");
 
-	//Receive Character
-	socket.on("character", function(data){
-		characters.push(data);
+	//Receive Data
+	socket.on("data", function(data){
+		this.found = false;
+		for(var x = characters.length - 1; x >= 0; x--){
+			if(characters[x].id == data.id){
+				characters[x].mouseX = data.mouseX;
+				characters[x].mouseY = data.mouseY;
+				characters[x].heartbeat = 5;
+				this.found = true;
+			}
+		}
+		if(!this.found){
+			characters.push({
+				x: Math.ceil(Math.random() * (canvasDimensions.width - 1)),
+				y: Math.ceil(Math.random() * (canvasDimensions.width - 1)),
+				color: "rgb(" + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ")",
+				name: data.name,
+				xIncr: 4,
+				yIncr: 4,
+				deaths: 0,
+				kills: 0,
+				id: data.id,
+				ammo: 10,
+				rotation: 0,
+				mouseX: data.mouseX,
+				mouseY: data.mouseY,
+				heartbeat: 5
+			});
+		}
+
 	});
 
 	//Receive Bullet
 	socket.on("bullet", function(data){
-		bullets.push(data);
+		for(var y = characters.length - 1; y >= 0; y--){
+			if(characters[y].id == data.owner){
+				this.speed = 0;
+			  this.dx = characters[y].mouseX - (characters[y].x + characterDimensions.width / 2);
+			  this.dy = characters[y].mouseY - (characters[y].y + characterDimensions.height / 2);
+			  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
+			  this.vx = (this.dx / this.mag) * this.speed;
+			  this.vy = (this.dy / this.mag) * this.speed;
+				this.x = characters[y].x + this.vx;
+				this.y = characters[y].y + this.vy;
+				bullets.push({
+					x: this.x,
+					y: this.y,
+					xIncr: this.vx,
+					yIncr: this.vy,
+					owner: data.owner
+				});
+			}
+		}
 	})
 })
+
+var heartBeatTester = setInterval(function(){
+	for(var x = characters.length - 1; x >= 0; x--){
+		characters[x].heartbeat -= 1;
+		if(characters[x].heartbeat <= 0){
+			characters.splice(x, 1);
+		}
+	}
+}, 1000)
