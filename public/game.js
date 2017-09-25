@@ -31,6 +31,7 @@ function loop(){
   c.clearRect(0, 0, canvasDimensions.width, canvasDimensions.height);
   drawBullets();
   drawCharacters();
+	drawBubbles();
   drawScore();
 }
 

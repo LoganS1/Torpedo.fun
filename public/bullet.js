@@ -4,6 +4,5 @@ function drawBullets(){
     c.arc(bullets[i].x, bullets[i].y, 3, 0, 2*Math.PI);
     c.fillStyle = "black";
     c.fill();
-    c.stroke();
   }
 }

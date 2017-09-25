@@ -41,20 +41,20 @@ var loop = setInterval(function(){
 	characterCollisionDetection();
 	bulletCollisionDetection();
 	updateConsole();
-	//bubbleCollisionDetection();
+	bubbleCollisionDetection();
 	emitArrays();
 }, 1000/60);
 
 var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );		if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
 
 function updateConsole(){
-	console.log("Players Connected: " + characters.length + "\n FPS: " + fps.getFPS() + "\n" + createPlayerList());
+	console.log("FPS: " + fps.getFPS() + "\nPlayers Connected: " + characters.length + "\n" + createPlayerList());
 }
 
 function createPlayerList(){
 	this.toReturn = "";
 	for(var y = characters.length - 1; y >= 0; y--){
-		this.toReturn += (y + ". "+ characters[y].name + "\n");
+		this.toReturn += ((y + 1) + ". "+ characters[y].name + "\n");
 	}
 	return this.toReturn;
 }
@@ -65,17 +65,17 @@ function updateCharacters(){
 		this.currChar = characters[x];
 
 		if(this.currChar.x - 25 < this.currChar.mouseX){
-      this.currChar.x += this.currChar.xIncr;
+      this.currChar.x += this.currChar.speed;
     }
     if(this.currChar.x + 50 > this.currChar.mouseX){
-      this.currChar.x -= this.currChar.xIncr
+      this.currChar.x -= this.currChar.speed;
     }
 
     if(this.currChar.y - 25 < this.currChar.mouseY){
-      this.currChar.y += this.currChar.yIncr;
+      this.currChar.y += this.currChar.speed;
     }
     if(this.currChar.y + 50 > this.currChar.mouseY){
-      this.currChar.y -= this.currChar.yIncr;
+      this.currChar.y -= this.currChar.speed;
     }
     this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY, (this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
 	}
@@ -87,22 +87,37 @@ function characterCollisionDetection(){
 
 /*----------Bubbles----------*/
 var createBubblesCount = 0;
+var bubbleAmounts = {
+	damage: 0,
+	health: 0,
+	ammo: 0,
+	speed: 0
+};
+
 var createBubbles = setInterval(function(){
-/*
-Effect Status's meanings
-0 = damage;
-1 = health;
-2 = ammo;
-3 = speed;
-*/
 	if(createBubblesCount % 30 === 0){
-		createBubble(0);
-	}else if(createBubblesCount % 20 === 0){
-		createBubble(1);
-	}else if(createBubblesCount % 10 === 0){
-		createBubble(3);
-	}else if(createBubblesCount % 5 === 0){
-		createBubble(2);
+		if(bubbleAmounts.damage < 2){
+			bubbleAmounts.damage += 1;
+			createBubble("damage");
+		}
+	}
+	if(createBubblesCount % 20 === 0){
+		if(bubbleAmounts.health < 2){
+			bubbleAmounts.health += 1;
+			createBubble("health");
+		}
+	}
+	if(createBubblesCount % 5 === 0){
+		if(bubbleAmounts.ammo < 2){
+			bubbleAmounts.ammo += 1;
+			createBubble("ammo");
+		}
+	}
+	if(createBubblesCount % 10 === 0){
+		if(bubbleAmounts.speed < 2){
+			bubbleAmounts.speed += 1;
+			createBubble("speed");
+		}
 	}
 
 	//counter updating
@@ -112,6 +127,24 @@ Effect Status's meanings
 	}
 
 }, 1000);
+
+var updateCharacteStatusTimers = setInterval(function(){
+	for(var x = characters.length - 1; x >= 0; x--){
+		if(characters[x].timers.speed <= 0){
+			characters[x].speed = 4;
+		}else{
+			characters[x].speed = 8;
+			characters[x].timers.speed -= 1;
+		}
+
+		if(characters[x].timers.damage <= 0){
+			characters[x].damage = 2;
+		}else{
+			characters[x].damage = 5;
+			characters[x].timers.damage -= 1;
+		}
+	}
+}, 1000)
 
 function createBubble(status){
 	//add bubble max limit checking here
@@ -131,7 +164,24 @@ function bubbleCollisionDetection(){
 			//running through arrays comparing each bubble to each character
 			if(this.bubble.x >= this.char.x && this.bubble.x <= this.char.x + characterDimensions.width && this.bubble.y >= this.char.y && this.bubble.y <= this.char.y + characterDimensions.height){
 				//when a bubbele is found inside a character
-
+				switch(this.bubble.status){
+					case "damage": this.char.timers.damage += 5;
+						bubbleAmounts.damage -= 1;
+						break;
+					case "speed": this.char.timers.speed += 5;
+						bubbleAmounts.speed -= 1;
+						break;
+					case "ammo": this.char.ammo = 10;
+						bubbleAmounts.ammo -= 1;
+						break;
+					case "health": this.char.health += 5;
+						if(this.char.health > 10){
+							this.char.health = 10;
+						}
+						bubbleAmounts.health -= 1;
+						break;
+				}
+				bubbles.splice(i, 1);
 			}
 		}
 	}
@@ -222,7 +272,13 @@ io.on("connection", function(socket){
 				rotation: 0,
 				mouseX: data.mouseX,
 				mouseY: data.mouseY,
-				heartbeat: 5
+				heartbeat: 5,
+				damage: 2,
+				speed: 4,
+				timers: {
+					speed: 0,
+					damage: 0
+				}
 			});
 		}
 
@@ -232,22 +288,25 @@ io.on("connection", function(socket){
 	socket.on("bullet", function(data){
 		for(var y = characters.length - 1; y >= 0; y--){
 			if(characters[y].id == data.owner){
-				this.speed = 15;
-			  this.dx = characters[y].mouseX - (characters[y].x + characterDimensions.width / 2);
-			  this.dy = characters[y].mouseY - (characters[y].y + characterDimensions.height / 2);
-			  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
-			  this.vx = (this.dx / this.mag) * this.speed;
-			  this.vy = (this.dy / this.mag) * this.speed;
-				this.x = (characters[y].x + characterDimensions.width / 2) + this.vx;
-				this.y = (characters[y].y + characterDimensions.height / 2) + this.vy;
-				bullets.push({
-					x: this.x,
-					y: this.y,
-					xIncr: this.vx,
-					yIncr: this.vy,
-					damage: 2,
-					owner: data.owner
-				});
+				if(characters[y].ammo >= 1){
+					this.speed = 15;
+				  this.dx = characters[y].mouseX - (characters[y].x + characterDimensions.width / 2);
+				  this.dy = characters[y].mouseY - (characters[y].y + characterDimensions.height / 2);
+				  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
+				  this.vx = (this.dx / this.mag) * this.speed;
+				  this.vy = (this.dy / this.mag) * this.speed;
+					this.x = (characters[y].x + characterDimensions.width / 2) + this.vx;
+					this.y = (characters[y].y + characterDimensions.height / 2) + this.vy;
+					bullets.push({
+						x: this.x,
+						y: this.y,
+						xIncr: this.vx,
+						yIncr: this.vy,
+						damage: characters[y].damage,
+						owner: data.owner
+					});
+					characters[y].ammo -= 1;
+				}
 			}
 		}
 	})
