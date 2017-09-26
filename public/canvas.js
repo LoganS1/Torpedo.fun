@@ -3,7 +3,7 @@ var c = canvas.getContext("2d");
 canvas.height = 800;
 canvas.width = 800;
 
-function drawScore(){
+function drawUI(){
   this.y = 30;
   this.scoreArray=[];
   for(var i = characters.length - 1; i >= 0; i--){
@@ -32,5 +32,42 @@ function drawScore(){
     c.fillRect(this.currObj.x - 15, this.currObj.y - 25, this.currObj.ammo * 5, 5);
     c.textAlign = "left";
     this.y += 30;
+  }
+}
+/*----------Characters----------*/
+function drawCharacters(){
+  for(var i = 0; i < characters.length; i++){
+    this.currChar = characters[i];
+    c.save();
+    c.translate(this.currChar.x + characterDimensions.width/2, this.currChar.y + characterDimensions.height/2);
+    c.rotate(this.currChar.rotation);
+    c.translate(-(this.currChar.x + characterDimensions.width/2), - (this.currChar.y + characterDimensions.height/2))
+    c.fillStyle = this.currChar.color;
+    c.fillRect(this.currChar.x, this.currChar.y, characterDimensions.width, characterDimensions.height);
+    c.restore();
+  }
+}
+/*----------Bubbles----------*/
+var bubbleColors = {
+  damage: "red",
+  health: "green",
+  ammo: "purple",
+  speed: "blue"
+}
+function drawBubbles(){
+  for(var y = bubbles.length - 1; y >= 0; y--){
+    c.beginPath()
+    c.fillStyle = bubbleColors[bubbles[y].status];
+    c.arc(bubbles[y].x, bubbles[y].y, 5, 0, 2*Math.PI);
+    c.fill();
+  }
+}
+/*----------Bullets----------*/
+function drawBullets(){
+  for(var i = 0; i < bullets.length; i++){
+    c.beginPath();
+    c.arc(bullets[i].x, bullets[i].y, 3, 0, 2*Math.PI);
+    c.fillStyle = "black";
+    c.fill();
   }
 }

@@ -32,7 +32,7 @@ function loop(){
   drawBullets();
   drawCharacters();
 	drawBubbles();
-  drawScore();
+  drawUI();
 }
 
 loop();
