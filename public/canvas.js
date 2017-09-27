@@ -3,6 +3,7 @@ var c = canvas.getContext("2d");
 canvas.height = 800;
 canvas.width = 800;
 
+/*----------UI----------*/
 function drawUI(){
   this.y = 30;
   this.scoreArray=[];
@@ -34,6 +35,38 @@ function drawUI(){
     this.y += 30;
   }
 }
+
+/*----------Sections----------*/
+var currSection = {
+  x: 0,
+  y: 0
+}
+
+function updateSection(){
+
+  //x section updating
+  if(me.section.x != currSection.x){
+    if(me.section.x > currSection.x){
+      c.translate(-canvasDimensions.width, 0);
+      currSection.x++;
+    }else{
+      c.translate(canvasDimensions.width, 0);
+      currSection.x--;
+    }
+  }
+
+  //y section updating
+  if(me.section.y != currSection.y){
+    if(me.section.y > currSection.y){
+      c.translate(0, -canvasDimensions.height);
+      currSection.y++;
+    }else{
+      c.translate(0, canvasDimensions.height);
+      currSection.y--;
+    }
+  }
+}
+
 /*----------Characters----------*/
 function drawCharacters(){
   for(var i = 0; i < characters.length; i++){
@@ -47,6 +80,7 @@ function drawCharacters(){
     c.restore();
   }
 }
+
 /*----------Bubbles----------*/
 var bubbleColors = {
   damage: "red",
@@ -62,6 +96,7 @@ function drawBubbles(){
     c.fill();
   }
 }
+
 /*----------Bullets----------*/
 function drawBullets(){
   for(var i = 0; i < bullets.length; i++){

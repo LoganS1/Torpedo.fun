@@ -61,6 +61,7 @@ function createPlayerList(){
 
 /*----------Characters----------*/
 function updateCharacters(){
+	//update position
 	for(var x = characters.length - 1; x >= 0; x--){
 		this.currChar = characters[x];
 
@@ -78,6 +79,54 @@ function updateCharacters(){
       this.currChar.y -= this.currChar.speed;
     }
     this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY, (this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
+
+		//update section
+
+		//checking if character is in right sections
+		//ex rb = right bottom, mm = middle middle, lt = left top
+		if(this.currChar.x > canvasDimensions.width*2){
+			this.currChar.section.x = 2;
+		  if(this.currChar.y > canvasDimensions.height*2){
+		    //rb section
+				this.currChar.section.y = 2;
+		  }else if(this.currChar.y > canvasDimensions.height){
+		    //rm section
+				this.currChar.section.y = 1;
+		  }else{
+		    //rt section
+				this.currChar.section.y = 0;
+		  }
+		}
+
+		//checking if character is in middle sections
+		else if(this.currChar.x > canvasDimensions.width){
+			this.currChar.section.x = 1;
+		  if(this.currChar.y > canvasDimensions.height*2){
+		    //mb section
+				this.currChar.section.y = 2;
+		  }else if(this.currChar.y > canvasDimensions.height){
+		    //mm section
+				this.currChar.section.y = 1;
+		  }else{
+		    //mt section
+				this.currChar.section.y = 0;
+		  }
+		}
+
+		//checking if character is in left sections
+		else{
+			this.currChar.section.x = 0;
+		  if(this.currChar.y > canvasDimensions.height*2){
+		    //lb section
+				this.currChar.section.y = 2;
+		  }else if(this.currChar.y > canvasDimensions.height){
+		    //lm section
+				this.currChar.section.y = 1;
+		  }else{
+		    //lt section
+				this.currChar.section.y = 0;
+		  }
+		}
 	}
 }
 
@@ -241,7 +290,7 @@ function emitArrays(){
 
 //socket.io connections
 io.on("connection", function(socket){
-
+socket.emit("connection", {connection: "succsessful"});
 	//Receive Data
 	socket.on("data", function(data){
 		this.found = false;
@@ -275,6 +324,10 @@ io.on("connection", function(socket){
 				heartbeat: 5,
 				damage: 2,
 				speed: 4,
+				section: {
+					x: 1,
+					y: 1
+				},
 				timers: {
 					speed: 0,
 					damage: 0
