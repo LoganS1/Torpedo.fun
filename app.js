@@ -145,25 +145,25 @@ var bubbleAmounts = {
 
 var createBubbles = setInterval(function(){
 	if(createBubblesCount % 30 === 0){
-		if(bubbleAmounts.damage < 2){
+		if(bubbleAmounts.damage < 18){
 			bubbleAmounts.damage += 1;
 			createBubble("damage");
 		}
 	}
 	if(createBubblesCount % 20 === 0){
-		if(bubbleAmounts.health < 2){
+		if(bubbleAmounts.health < 18){
 			bubbleAmounts.health += 1;
 			createBubble("health");
 		}
 	}
 	if(createBubblesCount % 5 === 0){
-		if(bubbleAmounts.ammo < 2){
+		if(bubbleAmounts.ammo < 18){
 			bubbleAmounts.ammo += 1;
 			createBubble("ammo");
 		}
 	}
 	if(createBubblesCount % 10 === 0){
-		if(bubbleAmounts.speed < 2){
+		if(bubbleAmounts.speed < 18){
 			bubbleAmounts.speed += 1;
 			createBubble("speed");
 		}
@@ -198,8 +198,8 @@ var updateCharacteStatusTimers = setInterval(function(){
 function createBubble(status){
 	//add bubble max limit checking here
 	this.newBubble = {
-		x : Math.ceil(Math.random()* (canvasDimensions.width - 100)) + 50, //creates an x cordinate that is 50 places away from a wall.
-		y : Math.ceil(Math.random()* (canvasDimensions.height - 100)) + 50, //creates an y cordinate that is 50 places away from a wall.
+		x : Math.ceil(Math.random()* (canvasDimensions.width*3 - 100)) + 50, //creates an x cordinate that is 50 places away from a wall.
+		y : Math.ceil(Math.random()* (canvasDimensions.height*3 - 100)) + 50, //creates an y cordinate that is 50 places away from a wall.
 		status: status
 	}
 	bubbles.push(this.newBubble);

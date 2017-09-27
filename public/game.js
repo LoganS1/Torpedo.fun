@@ -23,7 +23,7 @@ canvas.addEventListener("click", function(){
 
 window.addEventListener("mousemove", function(e){
     mouseX = (e.x - ((window.innerWidth / 2) - (canvas.width / 2))) + canvasDimensions.width * currSection.x;
-    mouseY = (e.y) + canvasDimensions.height * currSection.y;
+    mouseY = ((e.y) + canvasDimensions.height * currSection.y) - 100;
   })
 
 function loop(){

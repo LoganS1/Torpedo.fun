@@ -13,3 +13,7 @@ html, body {
   padding: 0;
   overflow: hidden;
 }
+
+body {
+  margin-top: 100px;
+}
