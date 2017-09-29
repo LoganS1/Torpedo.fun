@@ -7,10 +7,17 @@ canvas.width = 800;
 function drawUI(){
   this.y = 30;
   this.scoreArray=[];
+
   for(var i = characters.length - 1; i >= 0; i--){
     this.char = characters[i];
     scoreArray.push({x: this.char.x, y: this.char.y, name: this.char.name, health: this.char.health, deaths: this.char.deaths, kills: this.char.kills, ammo: this.char.ammo});
   }
+
+  c.fillStyle = "red";
+  c.fillRect(0, 0, canvasDimensions.width * 3, 10);
+  c.fillRect(0, 0, 10, canvasDimensions.height * 3);
+  c.fillRect(0, canvasDimensions.height * 3 - 10, canvasDimensions.width * 3, canvasDimensions.height*3);
+  c.fillRect(canvasDimensions.width * 3 - 10, 0, canvasDimensions.width * 3, canvasDimensions.height * 3);
 
   for(var t = characters.length - 1; t >= 0; t--){
     this.currObj = characters[t];
@@ -18,7 +25,7 @@ function drawUI(){
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
-    c.fillText(this.currObj.name + " " + this.currObj.deaths + " Deaths, " + this.currObj.kills + " Kills!", 10, this.y);
+    c.fillText(this.currObj.name + " " + this.currObj.deaths + " Deaths, " + this.currObj.kills + " Kills!", 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
     c.textAlign = "center";
     c.fillText(this.currObj.name, this.currObj.x, this.currObj.y - 30);
     //health bar

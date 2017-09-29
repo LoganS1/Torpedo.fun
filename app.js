@@ -65,6 +65,23 @@ function updateCharacters(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		this.currChar = characters[x];
 
+		if(this.currChar.x > canvasDimensions.width * 3 - 50){
+			this.currChar.x = canvasDimensions.width * 3 - 50;
+		}
+
+		if(this.currChar.x < 50){
+			this.currChar.x = 50;
+		}
+
+		if(this.currChar.y > canvasDimensions.height * 3 - 50){
+			this.currChar.y = canvasDimensions.height * 3 - 50;
+		}
+
+		if(this.currChar.y < 50){
+			this.currChar.y = 50;
+		}
+
+
 		if(this.currChar.x - 25 < this.currChar.mouseX){
       this.currChar.x += this.currChar.speed;
     }
@@ -151,13 +168,13 @@ var createBubbles = setInterval(function(){
 		}
 	}
 	if(createBubblesCount % 20 === 0){
-		if(bubbleAmounts.health < 18){
+		if(bubbleAmounts.health < 0){
 			bubbleAmounts.health += 1;
 			createBubble("health");
 		}
 	}
 	if(createBubblesCount % 5 === 0){
-		if(bubbleAmounts.ammo < 18){
+		if(bubbleAmounts.ammo < 25){
 			bubbleAmounts.ammo += 1;
 			createBubble("ammo");
 		}
@@ -177,7 +194,7 @@ var createBubbles = setInterval(function(){
 
 }, 1000);
 
-var updateCharacteStatusTimers = setInterval(function(){
+var updateCharacterStatusTimers = setInterval(function(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		if(characters[x].timers.speed <= 0){
 			characters[x].speed = 4;
@@ -241,7 +258,7 @@ function updateBullets(){
 	for(var x = bullets.length - 1; x >= 0; x--){
 		bullets[x].x += bullets[x].xIncr;
 		bullets[x].y += bullets[x].yIncr;
-		if(bullets[x].x > 2000 || bullets[x].x < -2000 || bullets[x].y > 2000 || bullets[x].y < -2000){
+		if(bullets[x].x > 5000 || bullets[x].x < -5000 || bullets[x].y > 5000 || bullets[x].y < -5000){
 			bullets.splice(x, 1);
 		}
 	}
@@ -307,8 +324,8 @@ socket.emit("connection", {connection: "succsessful"});
 				data.name = "torpedoed.io";
 			}
 			characters.push({
-				x: Math.ceil(Math.random() * (canvasDimensions.width - 1)),
-				y: Math.ceil(Math.random() * (canvasDimensions.width - 1)),
+				x: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * 3,
+				y: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * 3,
 				color: "rgb(" + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ")",
 				name: data.name,
 				xIncr: 4,

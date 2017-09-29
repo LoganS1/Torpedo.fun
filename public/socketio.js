@@ -14,6 +14,3 @@ var sendData = setInterval(function(){
   socket.emit("data", {mouseX: mouseX, mouseY: mouseY, id: id, name: name});
 }, 1000/60)
 
-var sendData = setInterval(function(){
-  socket.emit("data", {mouseX: mouseX, mouseY: mouseY, id: id, name: name});
-}, 1000/60)
