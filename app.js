@@ -168,7 +168,7 @@ var createBubbles = setInterval(function(){
 		}
 	}
 	if(createBubblesCount % 20 === 0){
-		if(bubbleAmounts.health < 0){
+		if(bubbleAmounts.health < 9){
 			bubbleAmounts.health += 1;
 			createBubble("health");
 		}
@@ -217,7 +217,8 @@ function createBubble(status){
 	this.newBubble = {
 		x : Math.ceil(Math.random()* (canvasDimensions.width*3 - 100)) + 50, //creates an x cordinate that is 50 places away from a wall.
 		y : Math.ceil(Math.random()* (canvasDimensions.height*3 - 100)) + 50, //creates an y cordinate that is 50 places away from a wall.
-		status: status
+		status: status,
+		size: 10
 	}
 	bubbles.push(this.newBubble);
 }
@@ -228,7 +229,7 @@ function bubbleCollisionDetection(){
 			this.char = characters[x];
 			this.bubble = bubbles[i];
 			//running through arrays comparing each bubble to each character
-			if(this.bubble.x >= this.char.x && this.bubble.x <= this.char.x + characterDimensions.width && this.bubble.y >= this.char.y && this.bubble.y <= this.char.y + characterDimensions.height){
+			if(this.bubble.x + this.bubble.size >= this.char.x && this.bubble.x - this.bubble.size <= this.char.x + characterDimensions.width && this.bubble.y + this.bubble.size >= this.char.y && this.bubble.y - this.bubble.size <= this.char.y + characterDimensions.height){
 				//when a bubbele is found inside a character
 				switch(this.bubble.status){
 					case "damage": this.char.timers.damage += 5;
@@ -271,7 +272,7 @@ function bulletCollisionDetection(){
 			this.bull = bullets[i];
 
 			//running through arrays comparing each bullet to each character
-			if(this.bull.x >= this.char.x && this.bull.x <= this.char.x + characterDimensions.width && this.bull.y >= this.char.y && this.bull.y <= this.char.y + characterDimensions.height){
+			if(this.bull.x + this.bull.size >= this.char.x && this.bull.x - this.bull.size <= this.char.x + characterDimensions.width && this.bull.y + this.bull.size >= this.char.y && this.bull.y - this.bull.size <= this.char.y + characterDimensions.height){
 				//when a bullet is found inside a character
 
 				//decrease that players health
@@ -373,7 +374,8 @@ socket.emit("connection", {connection: "succsessful"});
 						xIncr: this.vx,
 						yIncr: this.vy,
 						damage: characters[y].damage,
-						owner: data.owner
+						owner: data.owner,
+						size: 5
 					});
 					characters[y].ammo -= 1;
 				}

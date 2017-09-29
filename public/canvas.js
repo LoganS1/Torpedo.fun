@@ -99,7 +99,7 @@ function drawBubbles(){
   for(var y = bubbles.length - 1; y >= 0; y--){
     c.beginPath()
     c.fillStyle = bubbleColors[bubbles[y].status];
-    c.arc(bubbles[y].x, bubbles[y].y, 5, 0, 2*Math.PI);
+    c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
     c.fill();
   }
 }
@@ -108,7 +108,7 @@ function drawBubbles(){
 function drawBullets(){
   for(var i = 0; i < bullets.length; i++){
     c.beginPath();
-    c.arc(bullets[i].x, bullets[i].y, 3, 0, 2*Math.PI);
+    c.arc(bullets[i].x, bullets[i].y, bullets[i].size, 0, 2*Math.PI);
     c.fillStyle = "black";
     c.fill();
   }
