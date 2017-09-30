@@ -12,6 +12,22 @@ socket.on("data", function(data){
   AmtOfSectionsAcross = data.AmtOfSectionsAcross;
 })
 
-var sendData = setInterval(function(){
-  socket.emit("data", {mouseX: mouseX, mouseY: mouseY, id: id, name: name});
-}, 1000/60)
+socket.on("death", function(data){
+  if(data.id === id){
+    clearInterval(sendData);
+    splash.classList.remove("disappear");
+    died.classList.remove("disappear");
+    kills.innerHTML = me.kills + " Kills";
+    kills.classList.remove("disappear");
+  }
+})
+
+var sendData;
+
+function enter(){
+  name = input.value;
+  splash.classList.add("disappear");
+	sendData = setInterval(function(){
+	  socket.emit("data", {mouseX: mouseX, mouseY: mouseY, id: id, name: name});
+	}, 1000/60)
+}

@@ -5,6 +5,8 @@ canvas {
   padding: 0;
   cursor: crosshair;
   margin: auto;
+  border-radius: 10px;
+  border: 10px solid grey;
 }
 html, body {
   width: 100%;
@@ -14,6 +16,48 @@ html, body {
   overflow: hidden;
 }
 
-body {
-  margin-top: 100px;
+#splash {
+  background-color: grey;
+  margin: 0;
+  padding: 10px;
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+  border-radius: 10px;
+}
+
+#input{
+  width: 50%;
+  height: 30px;
+  margin: 0 25%;
+  border-radius: 10px;
+}
+
+#title{
+  color: darkgrey;
+  text-align: center;
+  height: 50px;
+}
+
+#enter{
+  background-color: lightblue;
+  border-radius: 10px;
+  width: 20%;
+  height: 30px;
+  margin: 5% 40%;
+}
+
+.disappear {
+  display: none;
+}
+
+
+h1, h2, h4 {
+  text-align: center;
+}
+
+h1, h2, h3, h4, p {
+  color: white;
 }

@@ -1,4 +1,8 @@
-var name = prompt("What name do you want?");
+var input = document.getElementById("input");
+var splash = document.getElementById("splash");
+var died = document.getElementById("died");
+var kills = document.getElementById("kills");
+var name;
 var id = Math.ceil(Math.random() * 100000000);
 var mouseX = 0;
 var mouseY = 0;
@@ -38,6 +42,7 @@ function loop(){
 loop();
 
 var me;
+
 
 function findMe(){
 	for(var y = characters.length - 1; y >= 0; y--){

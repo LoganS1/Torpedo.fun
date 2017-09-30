@@ -45,6 +45,7 @@ var loop = setInterval(function(){
 	updateConsole();
 	bubbleCollisionDetection();
 	emitArrays();
+	removeTheDead();
 }, 1000/60);
 
 var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );		if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
@@ -63,6 +64,7 @@ function createPlayerList(){
 
 /*----------Characters----------*/
 function updateCharacters(){
+
 	//update position
 	for(var x = characters.length - 1; x >= 0; x--){
 		this.currChar = characters[x];
@@ -304,19 +306,17 @@ function bulletCollisionDetection(){
 				this.char.health -= this.bull.damage;
 
 				//test to see if player is dead
-				if(this.char.health <= 1){
+				if(this.char.health <= 0){
 					//reset characters statistics
-					this.char.x = 0;
-					this.char.y = 0;
-					this.char.health = 10;
-					this.char.deaths += 1;
-					this.char.ammo = 10;
+					io.sockets.emit("death", {id: this.char.id});
 					for(var y = characters.length - 1; y >= 0; y--){
 						//find bullets owner and award the kill
 						if(characters[y].id === this.bull.owner){
 							characters[y].kills += 1;
 						}
 					}
+					//remove dead player
+					 this.char.died = true;
 				}
 				//remove the bullet after it has hit something
 				bullets.splice(i, 1);
@@ -367,6 +367,7 @@ socket.emit("connection", {connection: "succsessful"});
 				heartbeat: 5,
 				damage: 2,
 				speed: 4,
+				died: false,
 				section: {
 					x: 1,
 					y: 1
@@ -425,3 +426,11 @@ var heartBeatTester = setInterval(function(){
 		}
 	}
 }, 1000)
+
+function removeTheDead(){
+	for(var y = characters.length - 1; y >= 0; y--){
+		if(characters[y].died){
+			characters.splice(y, 1);
+		}
+	}
+}

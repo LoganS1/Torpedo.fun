@@ -6,6 +6,23 @@
     <link rel="stylesheet" href="stylesheet.css" media="screen">
   </head>
   <body>
+    <h1 id="title"> Torpedoed.io </h1>
+    <div id="splash">
+      <h1>Torpedoed.io</h1>
+      <h4>Controls</h4>
+      <p>Your "Submarine" will follow your mouse. Click to fire, but beware you
+        have limited ammo. To gain ammo, as well as health, speed, and oxygen
+        run into the colored "bubble" power-ups. Your oxygen will go down as you
+        play so make sure you get enough oxygen power-ups or you will lose control
+        and float to the surface (where your oxygen will then refill). Good Luck!
+      </p>
+      <h2 id="died" class="disappear">YOU DIED</h2>
+      <h2 id="kills" class="disappear"></h2>
+      <input id="input" type="text" name="name" placeholder="Nickname">
+      <br>
+      <button id="enter" onclick="enter()" type="button" name="Enter">Enter</button>
+    </div>
+
     <canvas id="myCanvas">
       oh-nooo! Your browser does not support canvas! :'(
     </canvas>
