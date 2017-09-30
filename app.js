@@ -24,6 +24,8 @@ var bullets = [];
 var bubbles = [];
 
 //setting up dimensions to be used in the math of colision detection later
+var AmtOfSectionsAcross = 3;
+
 var canvasDimensions = {
 	height: 800,
 	width: 800
@@ -65,36 +67,53 @@ function updateCharacters(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		this.currChar = characters[x];
 
-		if(this.currChar.x > canvasDimensions.width * 3 - 50){
-			this.currChar.x = canvasDimensions.width * 3 - 50;
+		if(this.currChar.y <= 100 && this.currChar.timers.oxygen <= 20){
+			this.currChar.timers.oxygen += 1;
 		}
 
-		if(this.currChar.x < 50){
-			this.currChar.x = 50;
+		if(this.currChar.y <= 100){
+			this.currChar.downV += .1;
+		}else{
+			this.currChar.downV = 0;
 		}
 
-		if(this.currChar.y > canvasDimensions.height * 3 - 50){
-			this.currChar.y = canvasDimensions.height * 3 - 50;
+		if(this.currChar.noOxygen){
+			this.currChar.y -= 1;
+		}else{
+			//Boundaries
+			if(this.currChar.x > canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width){
+				this.currChar.x = canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width;
+			}
+
+			if(this.currChar.x < characterDimensions.width){
+				this.currChar.x = characterDimensions.width;
+			}
+
+			if(this.currChar.y > canvasDimensions.height * AmtOfSectionsAcross - characterDimensions.height){
+				this.currChar.y = canvasDimensions.height * AmtOfSectionsAcross - characterDimensions.height;
+			}
+
+			if(this.currChar.y < characterDimensions.height){
+				this.currChar.y = characterDimensions.height;
+			}
+
+			//movement
+			if(this.currChar.x - 25 < this.currChar.mouseX){
+	      this.currChar.x += this.currChar.speed;
+	    }
+	    if(this.currChar.x + 50 > this.currChar.mouseX){
+	      this.currChar.x -= this.currChar.speed;
+	    }
+
+			this.currChar.y += this.currChar.downV;
+			if(this.currChar.y - 25 < this.currChar.mouseY){
+	      this.currChar.y += this.currChar.speed;
+	    }
+	    if(this.currChar.y + 50 > this.currChar.mouseY){
+	      this.currChar.y -= this.currChar.speed;
+	    }
+
 		}
-
-		if(this.currChar.y < 50){
-			this.currChar.y = 50;
-		}
-
-
-		if(this.currChar.x - 25 < this.currChar.mouseX){
-      this.currChar.x += this.currChar.speed;
-    }
-    if(this.currChar.x + 50 > this.currChar.mouseX){
-      this.currChar.x -= this.currChar.speed;
-    }
-
-    if(this.currChar.y - 25 < this.currChar.mouseY){
-      this.currChar.y += this.currChar.speed;
-    }
-    if(this.currChar.y + 50 > this.currChar.mouseY){
-      this.currChar.y -= this.currChar.speed;
-    }
     this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY, (this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
 
 		//update section
@@ -154,19 +173,13 @@ function characterCollisionDetection(){
 /*----------Bubbles----------*/
 var createBubblesCount = 0;
 var bubbleAmounts = {
-	damage: 0,
 	health: 0,
 	ammo: 0,
-	speed: 0
+	speed: 0,
+	oxygen: 0
 };
 
 var createBubbles = setInterval(function(){
-	if(createBubblesCount % 30 === 0){
-		if(bubbleAmounts.damage < 18){
-			bubbleAmounts.damage += 1;
-			createBubble("damage");
-		}
-	}
 	if(createBubblesCount % 20 === 0){
 		if(bubbleAmounts.health < 9){
 			bubbleAmounts.health += 1;
@@ -174,15 +187,21 @@ var createBubbles = setInterval(function(){
 		}
 	}
 	if(createBubblesCount % 5 === 0){
-		if(bubbleAmounts.ammo < 25){
+		if(bubbleAmounts.ammo < 18){
 			bubbleAmounts.ammo += 1;
 			createBubble("ammo");
 		}
 	}
 	if(createBubblesCount % 10 === 0){
-		if(bubbleAmounts.speed < 18){
+		if(bubbleAmounts.speed < 5){
 			bubbleAmounts.speed += 1;
 			createBubble("speed");
+		}
+	}
+	if(createBubblesCount % 5 === 0){
+		if(bubbleAmounts.oxygen < 18){
+			bubbleAmounts.oxygen += 1;
+			createBubble("oxygen");
 		}
 	}
 
@@ -203,11 +222,11 @@ var updateCharacterStatusTimers = setInterval(function(){
 			characters[x].timers.speed -= 1;
 		}
 
-		if(characters[x].timers.damage <= 0){
-			characters[x].damage = 2;
+		if(characters[x].timers.oxygen <= 0){
+			characters[x].noOxygen = true;
 		}else{
-			characters[x].damage = 5;
-			characters[x].timers.damage -= 1;
+			characters[x].noOxygen = false;
+			characters[x].timers.oxygen -= 1;
 		}
 	}
 }, 1000)
@@ -215,8 +234,8 @@ var updateCharacterStatusTimers = setInterval(function(){
 function createBubble(status){
 	//add bubble max limit checking here
 	this.newBubble = {
-		x : Math.ceil(Math.random()* (canvasDimensions.width*3 - 100)) + 50, //creates an x cordinate that is 50 places away from a wall.
-		y : Math.ceil(Math.random()* (canvasDimensions.height*3 - 100)) + 50, //creates an y cordinate that is 50 places away from a wall.
+		x : Math.ceil(Math.random()* (canvasDimensions.width*AmtOfSectionsAcross - 100)) + 50, //creates an x cordinate that is 50 places away from a wall.
+		y : Math.ceil(Math.random()* (canvasDimensions.height*AmtOfSectionsAcross - 100)) + 50, //creates an y cordinate that is 50 places away from a wall.
 		status: status,
 		size: 10
 	}
@@ -232,18 +251,24 @@ function bubbleCollisionDetection(){
 			if(this.bubble.x + this.bubble.size >= this.char.x && this.bubble.x - this.bubble.size <= this.char.x + characterDimensions.width && this.bubble.y + this.bubble.size >= this.char.y && this.bubble.y - this.bubble.size <= this.char.y + characterDimensions.height){
 				//when a bubbele is found inside a character
 				switch(this.bubble.status){
-					case "damage": this.char.timers.damage += 5;
-						bubbleAmounts.damage -= 1;
-						break;
 					case "speed": this.char.timers.speed += 5;
 						bubbleAmounts.speed -= 1;
 						break;
-					case "ammo": this.char.ammo = 10;
+					case "ammo": this.char.ammo += 10;
+						if(this.char.ammo > this.char.max.ammo){
+							this.char.ammo = this.char.max.ammo;
+						}
 						bubbleAmounts.ammo -= 1;
 						break;
+					case "oxygen": this.char.timers.oxygen += 10;
+						if(this.char.timers.oxygen > this.char.max.oxygen){
+							this.char.timers.oxygen = this.char.max.oxygen;
+						}
+						bubbleAmounts.oxygen -= 1;
+						break;
 					case "health": this.char.health += 5;
-						if(this.char.health > 10){
-							this.char.health = 10;
+						if(this.char.health > this.char.max.health){
+							this.char.health = this.char.max.health;
 						}
 						bubbleAmounts.health -= 1;
 						break;
@@ -303,7 +328,7 @@ function bulletCollisionDetection(){
 /*----------Socket.io----------*/
 //emits positions to all clients
 function emitArrays(){
-	io.sockets.emit("data", {characters: characters, bullets: bullets, bubbles: bubbles});
+	io.sockets.emit("data", {characters: characters, bullets: bullets, bubbles: bubbles, characterDimensions: characterDimensions, AmtOfSectionsAcross: AmtOfSectionsAcross});
 };
 
 //socket.io connections
@@ -325,8 +350,8 @@ socket.emit("connection", {connection: "succsessful"});
 				data.name = "torpedoed.io";
 			}
 			characters.push({
-				x: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * 3,
-				y: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * 3,
+				x: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
+				y: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
 				color: "rgb(" + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ")",
 				name: data.name,
 				xIncr: 4,
@@ -348,7 +373,13 @@ socket.emit("connection", {connection: "succsessful"});
 				},
 				timers: {
 					speed: 0,
-					damage: 0
+					damage: 0,
+					oxygen: 10
+				},
+				max: {
+					health: 10,
+					ammo: 10,
+					oxygen: 10
 				}
 			});
 		}
@@ -375,7 +406,8 @@ socket.emit("connection", {connection: "succsessful"});
 						yIncr: this.vy,
 						damage: characters[y].damage,
 						owner: data.owner,
-						size: 5
+						size: 5,
+						downV: 0
 					});
 					characters[y].ammo -= 1;
 				}

@@ -5,16 +5,13 @@ var mouseY = 0;
 var bullets = [];
 var characters = [];
 var bubbles = [];
+var characterDimensions;
+var AmtOfSectionsAcross;
 
 //setting up dimensions to be used in the math of colision detection later
 var canvasDimensions = {
 	height: 800,
 	width: 800
-}
-
-var characterDimensions = {
-	height: 15,
-	width: 25
 }
 
 canvas.addEventListener("click", function(){
@@ -29,8 +26,9 @@ window.addEventListener("mousemove", function(e){
 function loop(){
 	findMe();
   requestAnimationFrame(loop);
-  c.clearRect(0, 0, canvasDimensions.width*3, canvasDimensions.height*3);
-  drawBullets();
+  c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
+	drawBackground();
+	drawBullets();
   drawCharacters();
 	drawBubbles();
   drawUI();

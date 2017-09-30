@@ -8,36 +8,39 @@ function drawUI(){
   this.y = 30;
   this.scoreArray=[];
 
-  for(var i = characters.length - 1; i >= 0; i--){
-    this.char = characters[i];
-    scoreArray.push({x: this.char.x, y: this.char.y, name: this.char.name, health: this.char.health, deaths: this.char.deaths, kills: this.char.kills, ammo: this.char.ammo});
-  }
-
   c.fillStyle = "red";
-  c.fillRect(0, 0, canvasDimensions.width * 3, 10);
-  c.fillRect(0, 0, 10, canvasDimensions.height * 3);
-  c.fillRect(0, canvasDimensions.height * 3 - 10, canvasDimensions.width * 3, canvasDimensions.height*3);
-  c.fillRect(canvasDimensions.width * 3 - 10, 0, canvasDimensions.width * 3, canvasDimensions.height * 3);
+  c.fillRect(0, 0, canvasDimensions.width * AmtOfSectionsAcross, 10);
+  c.fillRect(0, 0, 10, canvasDimensions.height * AmtOfSectionsAcross);
+  c.fillRect(0, canvasDimensions.height * AmtOfSectionsAcross - 10, canvasDimensions.width * AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
+  c.fillRect(canvasDimensions.width * AmtOfSectionsAcross - 10, 0, canvasDimensions.width * AmtOfSectionsAcross, canvasDimensions.height * AmtOfSectionsAcross);
 
   for(var t = characters.length - 1; t >= 0; t--){
-    this.currObj = characters[t];
+    this.currChar = characters[t];
 
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
-    c.fillText(this.currObj.name + " " + this.currObj.deaths + " Deaths, " + this.currObj.kills + " Kills!", 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
+    c.fillText(this.currChar.name, 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
     c.textAlign = "center";
-    c.fillText(this.currObj.name, this.currObj.x, this.currObj.y - 30);
+    c.fillText(this.currChar.name, this.currChar.x, this.currChar.y - 30);
+    if(this.currChar.timers.speed > 0){
+      c.fillText("-Speed: " + this.currChar.timers.speed, this.currChar.x, this.currChar.y - 70);
+    }
+    //oxygen bar
+    c.fillStyle = "grey";
+    c.fillRect(this.currChar.x - 15, this.currChar.y -15, 50, 5);
+    c.fillStyle = "white";
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 15, this.currChar.timers.oxygen * 5, 5);
     //health bar
     c.fillStyle = "grey";
-    c.fillRect(this.currObj.x - 15, this.currObj.y - 20, 50, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 20, 50, 5);
     c.fillStyle = "red";
-    c.fillRect(this.currObj.x - 15, this.currObj.y - 20, this.currObj.health * 5, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 20, this.currChar.health * 5, 5);
     //ammo bar
     c.fillStyle = "grey";
-    c.fillRect(this.currObj.x - 15, this.currObj.y - 25, 50, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 25, 50, 5);
     c.fillStyle = "black";
-    c.fillRect(this.currObj.x - 15, this.currObj.y - 25, this.currObj.ammo * 5, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 25, this.currChar.ammo * 5, 5);
     c.textAlign = "left";
     this.y += 30;
   }
@@ -93,13 +96,15 @@ var bubbleColors = {
   damage: "red",
   health: "green",
   ammo: "purple",
-  speed: "blue"
+  speed: "blue",
+  oxygen: "black"
 }
 function drawBubbles(){
   for(var y = bubbles.length - 1; y >= 0; y--){
     c.beginPath()
     c.fillStyle = bubbleColors[bubbles[y].status];
     c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
+    c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
     c.fill();
   }
 }
@@ -112,4 +117,10 @@ function drawBullets(){
     c.fillStyle = "black";
     c.fill();
   }
+}
+
+function drawBackground(){
+  c.fillStyle = "lightblue";
+  c.fillRect(0, 100, canvasDimensions.width * AmtOfSectionsAcross, canvasDimensions.height * AmtOfSectionsAcross);
+
 }

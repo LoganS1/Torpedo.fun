@@ -8,9 +8,10 @@ socket.on("data", function(data){
   bullets = data.bullets;
   characters = data.characters;
   bubbles = data.bubbles;
+  characterDimensions = data.characterDimensions;
+  AmtOfSectionsAcross = data.AmtOfSectionsAcross;
 })
 
 var sendData = setInterval(function(){
   socket.emit("data", {mouseX: mouseX, mouseY: mouseY, id: id, name: name});
 }, 1000/60)
-
