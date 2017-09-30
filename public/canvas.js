@@ -119,6 +119,17 @@ function drawBullets(){
   }
 }
 
+/*----------Coins----------*/
+function drawCoins(){
+  for(var i = 0; i < coins.length; i++){
+    c.beginPath();
+    c.arc(coins[i].x, coins[i].y, coins[i].size, 0, 2*Math.PI);
+    c.fillStyle = "yellow";
+    c.fill();
+  }
+}
+
+
 function drawBackground(){
   c.fillStyle = "lightblue";
   c.fillRect(0, 100, canvasDimensions.width * AmtOfSectionsAcross, canvasDimensions.height * AmtOfSectionsAcross);

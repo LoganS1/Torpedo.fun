@@ -9,6 +9,7 @@ var mouseY = 0;
 var bullets = [];
 var characters = [];
 var bubbles = [];
+var coins = [];
 var characterDimensions;
 var AmtOfSectionsAcross;
 
@@ -29,13 +30,14 @@ window.addEventListener("mousemove", function(e){
 
 function loop(){
 	findMe();
-  requestAnimationFrame(loop);
-  c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
+  	requestAnimationFrame(loop);
+  	c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
 	drawBackground();
 	drawBullets();
-  drawCharacters();
+  	drawCharacters();
 	drawBubbles();
-  drawUI();
+  	drawUI();
+  	drawCoins();
 	updateSection();
 }
 

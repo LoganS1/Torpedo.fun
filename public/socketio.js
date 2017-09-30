@@ -10,6 +10,7 @@ socket.on("data", function(data){
   bubbles = data.bubbles;
   characterDimensions = data.characterDimensions;
   AmtOfSectionsAcross = data.AmtOfSectionsAcross;
+  coins = data.coins;
 })
 
 socket.on("death", function(data){
