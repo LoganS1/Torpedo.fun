@@ -23,6 +23,14 @@ socket.on("death", function(data){
   }
 })
 
+socket.on("error", function(data){
+  console.log(data.error);
+})
+
+function upgrade(status){
+  socket.emit("upgrade", {status: status})
+}
+
 var sendData;
 
 function enter(){

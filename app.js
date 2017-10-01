@@ -492,6 +492,22 @@ io.on("connection", function(socket){
 			}
 		}
 	})
+	socket.on("upgrade", function(data){
+		for(var y = characters.length - 1; y >= 0; y--){
+			if(characters[y].id === socket.id){
+				if(data.status === "health" || data.status === "oxygen" || data.status === "ammo"){
+					this.cost = characters[y].max[data.status];
+					if(characters[y].coins >= this.cost){
+						characters[y].coins -= this.cost;
+						characters[y].max[data.status] += 5;
+					}else{
+						socket.emit("error", {error: "Not enough coins!"});
+					}
+				}
+				
+			}
+		}
+	})
 })
 
 var heartBeatTester = setInterval(function(){
