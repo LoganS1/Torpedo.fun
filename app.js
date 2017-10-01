@@ -179,8 +179,6 @@ function newCharacter(data, socket){
 		y: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
 		color: "rgb(" + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ")",
 		name: data.name,
-		xIncr: 4,
-		yIncr: 4,
 		deaths: 0,
 		kills: 0,
 		health: 10,
