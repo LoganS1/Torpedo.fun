@@ -14,7 +14,7 @@ socket.on("data", function(data){
 })
 
 socket.on("death", function(data){
-  if(data.id === id){
+  if(data.deathID === me.deathID){
     clearInterval(sendData);
     splash.classList.remove("disappear");
     died.classList.remove("disappear");
@@ -29,6 +29,6 @@ function enter(){
   name = input.value;
   splash.classList.add("disappear");
 	sendData = setInterval(function(){
-	  socket.emit("data", {mouseX: mouseX, mouseY: mouseY, id: id, name: name});
+	  socket.emit("data", {mouseX: mouseX, mouseY: mouseY, name: name});
 	}, 1000/60)
 }

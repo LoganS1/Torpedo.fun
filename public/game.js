@@ -3,7 +3,6 @@ var splash = document.getElementById("splash");
 var died = document.getElementById("died");
 var kills = document.getElementById("kills");
 var name;
-var id = Math.ceil(Math.random() * 100000000);
 var mouseX = 0;
 var mouseY = 0;
 var bullets = [];
@@ -20,7 +19,7 @@ var canvasDimensions = {
 }
 
 canvas.addEventListener("click", function(){
-  socket.emit("bullet", {owner: id, x: mouseX, y: mouseY});
+  socket.emit("bullet", {owner: socket.id, x: mouseX, y: mouseY});
 })
 
 window.addEventListener("mousemove", function(e){
@@ -30,14 +29,14 @@ window.addEventListener("mousemove", function(e){
 
 function loop(){
 	findMe();
-  	requestAnimationFrame(loop);
-  	c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
+  requestAnimationFrame(loop);
+  c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
 	drawBackground();
 	drawBullets();
-  	drawCharacters();
+  drawCharacters();
 	drawBubbles();
-  	drawUI();
-  	drawCoins();
+  drawUI();
+  drawCoins();
 	updateSection();
 }
 
@@ -48,7 +47,7 @@ var me;
 
 function findMe(){
 	for(var y = characters.length - 1; y >= 0; y--){
-		if(characters[y].id === id){
+		if(characters[y].id === socket.id){
 			me = characters[y];
 		}
 	}

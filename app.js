@@ -47,12 +47,11 @@ var loop = setInterval(function(){
 	updateConsole();
 	bubbleCollisionDetection();
 	removeTheDead();
-	emitArrays();
-	
+
 }, 1000/60);
 
 var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),
-			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );		
+			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );
 			if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
 
 function updateConsole(){
@@ -121,7 +120,7 @@ function updateCharacters(){
 	    }
 
 		}
-    this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY, 
+    this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY,
     	(this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
 
 		//update section
@@ -174,7 +173,7 @@ function updateCharacters(){
 	}
 }
 
-function newCharacter(data){
+function newCharacter(data, socket){
 	characters.push({
 		x: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
 		y: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
@@ -185,7 +184,8 @@ function newCharacter(data){
 		deaths: 0,
 		kills: 0,
 		health: 10,
-		id: data.id,
+		id: socket.id,
+		deathID: makeID(),
 		ammo: 10,
 		rotation: 0,
 		mouseX: data.mouseX,
@@ -294,7 +294,7 @@ function bubbleCollisionDetection(){
 			this.char = characters[x];
 			this.bubble = bubbles[i];
 			//running through arrays comparing each bubble to each character
-			if(this.bubble.x + this.bubble.size >= this.char.x && this.bubble.x - this.bubble.size <= this.char.x + characterDimensions.width 
+			if(this.bubble.x + this.bubble.size >= this.char.x && this.bubble.x - this.bubble.size <= this.char.x + characterDimensions.width
 				&& this.bubble.y + this.bubble.size >= this.char.y && this.bubble.y - this.bubble.size <= this.char.y + characterDimensions.height){
 				//when a bubbele is found inside a character
 				switch(this.bubble.status){
@@ -344,7 +344,7 @@ function bulletCollisionDetection(){
 			this.bull = bullets[i];
 
 			//running through arrays comparing each bullet to each character
-			if(this.bull.x + this.bull.size >= this.char.x && this.bull.x - this.bull.size <= this.char.x + characterDimensions.width 
+			if(this.bull.x + this.bull.size >= this.char.x && this.bull.x - this.bull.size <= this.char.x + characterDimensions.width
 				&& this.bull.y + this.bull.size >= this.char.y && this.bull.y - this.bull.size <= this.char.y + characterDimensions.height){
 				//when a bullet is found inside a character
 
@@ -361,11 +361,12 @@ function bulletCollisionDetection(){
 					}else{
 						newCoin(this.char.x, this.char.y, 10);
 					}
-					
-					
-					io.sockets.emit("death", {id: this.char.id});
+
+					//sends death to all players
+					io.sockets.emit("death", {deathID: this.char.deathID});
+
+					//find bullets owner and award the kill
 					for(var y = characters.length - 1; y >= 0; y--){
-						//find bullets owner and award the kill
 						if(characters[y].id === this.bull.owner){
 							characters[y].kills += 1;
 						}
@@ -389,7 +390,7 @@ function coinCollisionDetection(){
 			this.coin = coins[i];
 
 			//running through arrays comparing each bullet to each character
-			if(this.coin.x + this.coin.size >= this.char.x && this.coin.x - this.coin.size <= this.char.x + characterDimensions.width 
+			if(this.coin.x + this.coin.size >= this.char.x && this.coin.x - this.coin.size <= this.char.x + characterDimensions.width
 				&& this.coin.y + this.coin.size >= this.char.y && this.coin.y - this.coin.size <= this.char.y + characterDimensions.height){
 				//when a coin is found inside a character
 				this.char.coins += 1;
@@ -404,25 +405,52 @@ function newCoin(x, y, size){
 		x: x,
 		y: y,
 		size: size
-	} 
+	}
 	coins.push(this.coin);
 }
 
 /*----------Socket.io----------*/
-//emits positions to all clients
-function emitArrays(){
-	io.sockets.emit("data", {characters: characters, bullets: bullets, bubbles: bubbles, characterDimensions: characterDimensions, 
-		AmtOfSectionsAcross: AmtOfSectionsAcross, coins: coins});
-};
-
 //socket.io connections
 io.on("connection", function(socket){
-socket.emit("connection", {connection: "successful"});
+	socket.emit("connection", {connection: "successful"});
+
+	//send data
+	this.sendData = setInterval(function(){
+		//emiting the data 60 times a second
+
+		this.cleanedCharacters = JSON.parse(JSON.stringify(characters));
+		this.cleanedBullets = JSON.parse(JSON.stringify(bullets));
+
+		//cleaning characters array
+		for(var x = this.cleanedCharacters.length - 1; x >= 0; x--){
+			if(this.cleanedCharacters[x].id != socket.id){
+				this.cleanedCharacters[x].id = "n/a";
+				this.cleanedCharacters[x].heartbeat = "n/a";
+				this.cleanedCharacters[x].deathID = "n/a";
+			}else{
+				this.cleanedCharacters[x].heartbeat = "n/a";
+			}
+
+		}
+
+		//cleaning bullets array
+		for(var x = this.cleanedBullets.length - 1; x >= 0; x--){
+			this.cleanedBullets[x].owner = "n/a";
+		}
+
+		socket.emit("data", {characters: this.cleanedCharacters, bullets: this.cleanedBullets,
+			bubbles: bubbles, characterDimensions: characterDimensions,
+			AmtOfSectionsAcross: AmtOfSectionsAcross, coins: coins
+		})
+	}, 1000/60)
+
 	//Receive Data
+	//updates characters information based on received data
 	socket.on("data", function(data){
 		this.found = false;
+		//checks to see if the player is a new player
 		for(var x = characters.length - 1; x >= 0; x--){
-			if(characters[x].id == data.id){
+			if(characters[x].id == socket.id){
 				characters[x].mouseX = data.mouseX;
 				characters[x].mouseY = data.mouseY;
 				characters[x].heartbeat = 5;
@@ -433,7 +461,7 @@ socket.emit("connection", {connection: "successful"});
 			if(data.name === "" || data.name.length > 12){
 				data.name = "torpedoed.io";
 			}
-			newCharacter(data);
+			newCharacter(data, socket);
 		}
 
 	});
@@ -482,6 +510,17 @@ function removeTheDead(){
 	for(var y = characters.length - 1; y >= 0; y--){
 		if(characters[y].died){
 			characters.splice(y, 1);
+		}
+	}
+}
+
+function makeID(){
+	this.id = Math.random()*20398475023;
+	for(var x = characters.length - 1; x >= 0; x--){
+		if(characters[x].deathID === this.id){
+			return makeID();
+		}else{
+			return this.id;
 		}
 	}
 }
