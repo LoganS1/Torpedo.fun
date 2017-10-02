@@ -61,3 +61,53 @@ h1, h2, h4 {
 h1, h2, h3, h4, p {
   color: white;
 }
+
+#upgradesBar {
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  margin: 5px auto;
+  background-color: grey;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 20%;
+  height: 40px;
+}
+
+.upgradeItems {
+  color: white;
+  float: left;
+  height: 100%;
+  width: 33%;
+  text-align: center;
+}
+
+.middleItem {
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+}
+
+#upgradeList {
+  color: black;
+  font-size: 24px;
+  margin: 5px auto;
+  background-color: grey;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 20%;
+  min-width: 400px;
+  height: 30px;
+  padding: auto;
+}
+
+#health{
+  background-color: green;
+}
+
+#oxygen {
+  background-color: grey;
+}
+
+#ammo {
+  background-color: purple;
+}

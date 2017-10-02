@@ -97,15 +97,29 @@ var bubbleColors = {
   health: "green",
   ammo: "purple",
   speed: "blue",
-  oxygen: "black"
+  oxygen: "black",
+  coin: "rgb(240, 240, 0)"
 }
 function drawBubbles(){
   for(var y = bubbles.length - 1; y >= 0; y--){
-    c.beginPath()
-    c.fillStyle = bubbleColors[bubbles[y].status];
-    c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
-    c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
-    c.fill();
+    if(bubbles[y].status === "coin"){
+      c.beginPath();
+      c.fillStyle = bubbleColors[bubbles[y].status];
+      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].xRadius, bubbles[y].size, Math.PI/180, 0, 2*Math.PI);
+      c.fill();
+      c.beginPath();
+      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].xRadius / 1.8, bubbles[y].size / 1.8, Math.PI/180, 0, 2*Math.PI);
+      c.fill();
+      c.strokeStyle = "black";
+      c.stroke();
+    }else{
+      c.beginPath()
+      c.fillStyle = bubbleColors[bubbles[y].status];
+      c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
+      c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      c.fill();
+    }
+    
   }
 }
 
@@ -118,17 +132,6 @@ function drawBullets(){
     c.fill();
   }
 }
-
-/*----------Coins----------*/
-function drawCoins(){
-  for(var i = 0; i < coins.length; i++){
-    c.beginPath();
-    c.arc(coins[i].x, coins[i].y, coins[i].size, 0, 2*Math.PI);
-    c.fillStyle = "yellow";
-    c.fill();
-  }
-}
-
 
 function drawBackground(){
   c.fillStyle = "lightblue";

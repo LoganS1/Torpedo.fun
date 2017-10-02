@@ -23,7 +23,7 @@ socket.on("death", function(data){
   }
 })
 
-socket.on("error", function(data){
+socket.on("uh-oh", function(data){
   console.log(data.error);
 })
 
