@@ -20,9 +20,9 @@ function drawUI(){
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
-    c.fillText(this.currChar.name, 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
+    c.fillText(this.currChar.name + " (" + this.currChar.coins + " Coins)", 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
     c.textAlign = "center";
-    c.fillText(this.currChar.name, this.currChar.x, this.currChar.y - 30);
+    c.fillText(this.currChar.name + " (" + this.currChar.coins + " Coins)", this.currChar.x, this.currChar.y - 30);
     if(this.currChar.timers.speed > 0){
       c.fillText("-Speed: " + this.currChar.timers.speed, this.currChar.x, this.currChar.y - 70);
     }
@@ -119,7 +119,7 @@ function drawBubbles(){
       c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
       c.fill();
     }
-    
+
   }
 }
 

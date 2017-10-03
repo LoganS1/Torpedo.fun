@@ -231,8 +231,8 @@ var createBubbles = setInterval(function(){
 			createBubble("health");
 		}
 	}
-	if(createBubblesCount % 5 === 0){
-		if(bubbleAmounts.health < 18){
+	if(createBubblesCount % 2 === 0){
+		if(bubbleAmounts.health < 27){
 			bubbleAmounts.health += 1;
 			createBubble("coin", false);
 		}
@@ -415,7 +415,7 @@ function updateCoins(){
 				bubbles[x].up = true;
 			}
 		}
-		
+
 	}
 }
 
@@ -517,7 +517,7 @@ io.on("connection", function(socket){
 						socket.emit("uh-oh", {error: "Not enough coins!"});
 					}
 				}
-				
+
 			}
 		}
 	})
