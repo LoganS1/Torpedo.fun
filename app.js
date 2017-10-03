@@ -27,11 +27,13 @@ var coins = [];
 //setting up dimensions to be used in the math of colision detection later
 var AmtOfSectionsAcross = 3;
 
+//setting up the canvas size to be used in math
 var canvasDimensions = {
 	height: 800,
 	width: 800
 }
 
+//setting up the character size to be used in math
 var characterDimensions = {
 	height: 15,
 	width: 25
@@ -39,25 +41,33 @@ var characterDimensions = {
 
 //loop that updates and sends out positions
 var loop = setInterval(function(){
+	//updating entities
 	updateCharacters();
 	updateBullets();
+	//collision detections
 	characterCollisionDetection();
 	bubbleCollisionDetection();
 	bulletCollisionDetection();
+	//updating console with server info
 	updateConsole();
+	//removing characters if they have been shot
 	removeTheDead();
+	//updating the rotation of the coins
 	updateCoins();
 
 }, 1000/60);
 
+//fps object that can be used to get fps
 var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),
 			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );
 			if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
 
+//updating the console with server info (FPS, Amt of Players, and Player Names)
 function updateConsole(){
 	console.log("FPS: " + fps.getFPS() + "\nPlayers Connected: " + characters.length + "\n" + createPlayerList());
 }
 
+//creates the player list to be used in updateConsole();
 function createPlayerList(){
 	this.toReturn = "";
 	for(var y = characters.length - 1; y >= 0; y--){
@@ -73,20 +83,26 @@ function updateCharacters(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		this.currChar = characters[x];
 
+		//checks if character is above the sea level and refills oxygen if so
 		if(this.currChar.y <= 100 && this.currChar.timers.oxygen < this.currChar.max.oxygen){
 			this.currChar.timers.oxygen += 1;
 		}
 
+		//"physics" for above water causing the character to fall back down
 		if(this.currChar.y <= 100){
 			this.currChar.downV += .1;
 		}else{
 			this.currChar.downV = 0;
 		}
 
+		//tests to see if character has oxygen before updating position
 		if(this.currChar.noOxygen){
+			//if character has no oxygen simple raise the character up
 			this.currChar.y -= 1;
 		}else{
+			//if the character does have oxygen
 			//Boundaries
+			//keeps the characters in the playable area.
 			if(this.currChar.x > canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width){
 				this.currChar.x = canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width;
 			}
@@ -104,6 +120,8 @@ function updateCharacters(){
 			}
 
 			//movement
+			//moves the player to the mouse cordinates.
+			//updating x cordinates
 			if(this.currChar.x - 25 < this.currChar.mouseX){
 	      this.currChar.x += this.currChar.speed;
 	    }
@@ -111,6 +129,7 @@ function updateCharacters(){
 	      this.currChar.x -= this.currChar.speed;
 	    }
 
+		    //updating y cordinates
 			this.currChar.y += this.currChar.downV;
 			if(this.currChar.y - 25 < this.currChar.mouseY){
 	      this.currChar.y += this.currChar.speed;
@@ -121,12 +140,26 @@ function updateCharacters(){
 
 		}
     this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY,
+		//calculates the rotation of the player based on players and mouses cordinates
     	(this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
 
 		//update section
+		//calculates what section the character is in (used in rendering on canvas)
 
 		//checking if character is in right sections
 		//ex rb = right bottom, mm = middle middle, lt = left top
+		/*
+		|-----------------------|
+		|		|		|		|
+		|(0, 0)	|(1, 0)	|(2, 0)	|
+		|-------|-------|-------|
+		|		|		|		|
+		|(0, 1)	|(1, 1)	|(2, 1)	|
+		|-------|-------|-------|
+		|		|		|		|
+		|(0, 2)	|(1, 2)	|(2, 2)	|
+		|-------|-------|-------|
+		*/
 		if(this.currChar.x > canvasDimensions.width*2){
 			this.currChar.section.x = 2;
 		  if(this.currChar.y > canvasDimensions.height*2){
@@ -173,6 +206,7 @@ function updateCharacters(){
 	}
 }
 
+//creates a new character when a client joins
 function newCharacter(data, socket){
 	characters.push({
 		x: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
@@ -190,6 +224,7 @@ function newCharacter(data, socket){
 		mouseY: data.mouseY,
 		heartbeat: 5,
 		damage: 2,
+		//how many x/y cordinates can a character move per frame
 		speed: 4,
 		died: false,
 		coins: 0,
@@ -197,11 +232,13 @@ function newCharacter(data, socket){
 			x: 1,
 			y: 1
 		},
+		//amt of time a character has the ability left
 		timers: {
 			speed: 0,
 			damage: 0,
 			oxygen: 10
 		},
+		//max amt of ability a character can have
 		max: {
 			health: 10,
 			ammo: 10,
@@ -216,6 +253,7 @@ function characterCollisionDetection(){
 
 /*----------Bubbles----------*/
 var createBubblesCount = 0;
+
 var bubbleAmounts = {
 	health: 0,
 	ammo: 0,
@@ -224,10 +262,17 @@ var bubbleAmounts = {
 	coin: 0
 };
 
+//sets an interval that creates creates bubbles based on time
+//because the interval runs every second and the time is kept with a variable
+// (createBubblesCount)
 var createBubbles = setInterval(function(){
+	//if the time / 20 give a whole number run
 	if(createBubblesCount % 20 === 0){
+		//if their is less than 9 of these bubbles run
 		if(bubbleAmounts.health < 9){
+			//update the amt of bubbles
 			bubbleAmounts.health += 1;
+			//actually create the bubble
 			createBubble("health");
 		}
 	}
@@ -264,6 +309,8 @@ var createBubbles = setInterval(function(){
 
 }, 1000);
 
+//sets an interval the lowers the "timers" of abilities on each character
+//also applies consequences of the timers
 var updateCharacterStatusTimers = setInterval(function(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		if(characters[x].timers.speed <= 0){
@@ -282,6 +329,7 @@ var updateCharacterStatusTimers = setInterval(function(){
 	}
 }, 1000)
 
+//function used to create the bubble
 function createBubble(status, useXY, x, y){
 	//add bubble max limit checking here
 	this.newBubble = {
@@ -290,17 +338,22 @@ function createBubble(status, useXY, x, y){
 		status: status,
 		size: 10
 	}
+	//coins are created like bubbles but need more info
 	if(status === "coin"){
 		if(useXY){
 			this.newBubble.x = x + Math.random()*20;
 			this.newBubble.y = y + Math.random()*20;
 		}
+		//used when spinning the coin, give the "Spinning" effect
 		this.newBubble.xRadius = this.newBubble.size;
+		//tells update function whether to increment above up or down
 		this.newBubble.up = false;
 	}
+	//add the newly created bubble to the bubbles array
 	bubbles.push(this.newBubble);
 }
 
+//tests to see if a character is hitting the bubble
 function bubbleCollisionDetection(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		for(var i = bubbles.length - 1; i >= 0; i--){
@@ -336,6 +389,7 @@ function bubbleCollisionDetection(){
 						bubbleAmounts.health -= 1;
 						break;
 				}
+				//removes hit bubble
 				bubbles.splice(i, 1);
 			}
 		}
@@ -343,16 +397,19 @@ function bubbleCollisionDetection(){
 }
 
 /*----------Bullets----------*/
+//updates the bullets position
 function updateBullets(){
 	for(var x = bullets.length - 1; x >= 0; x--){
 		bullets[x].x += bullets[x].xIncr;
 		bullets[x].y += bullets[x].yIncr;
 		if(bullets[x].x > 5000 || bullets[x].x < -5000 || bullets[x].y > 5000 || bullets[x].y < -5000){
+		//checks to see if bullet is out of bounds and deletes if so
 			bullets.splice(x, 1);
 		}
 	}
 }
 
+//detects if a bullets is hitting a player
 function bulletCollisionDetection(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		for(var i = bullets.length - 1; i >= 0; i--){
@@ -369,8 +426,9 @@ function bulletCollisionDetection(){
 
 				//test to see if player is dead
 				if(this.char.health <= 0){
-					//reset characters statistics
+					//tests to see if character has at least one coin, if not drop 1 coin
 					if(this.char.coins > 0){
+						//drop all coins the character had
 						for(var y = this.char.coins; y >= 0; y--){
 							createBubble("coin", true, this.char.x, this.char.y);
 						}
@@ -400,8 +458,10 @@ function bulletCollisionDetection(){
 
 /*----------Coins----------*/
 
+//updates the spin of the coins
 function updateCoins(){
 	for(var x = bubbles.length - 1; x >= 0; x--){
+		//checks if the bubble is a coin
 		if(bubbles[x].status === "coin"){
 			if(bubbles[x].up){
 				bubbles[x].xRadius += 1;
@@ -429,11 +489,14 @@ io.on("connection", function(socket){
 	this.sendData = setInterval(function(){
 		//emiting the data 60 times a second
 
+		//clones the arrays, cannot just set equal as updating cleanedCharacter/Bullets would still 
+		//update the original due to how JS handles cloning. (Just makes references)
 		this.cleanedCharacters = JSON.parse(JSON.stringify(characters));
 		this.cleanedBullets = JSON.parse(JSON.stringify(bullets));
 
 		//cleaning characters array
 		for(var x = this.cleanedCharacters.length - 1; x >= 0; x--){
+			//checks if character is me, if so leave in most info
 			if(this.cleanedCharacters[x].id != socket.id){
 				this.cleanedCharacters[x].id = "n/a";
 				this.cleanedCharacters[x].heartbeat = "n/a";
@@ -508,8 +571,11 @@ io.on("connection", function(socket){
 	socket.on("upgrade", function(data){
 		for(var y = characters.length - 1; y >= 0; y--){
 			if(characters[y].id === socket.id){
+				//makes sure the status actually exists
 				if(data.status === "health" || data.status === "oxygen" || data.status === "ammo"){
+					//sets the cost
 					this.cost = characters[y].max[data.status] / 2;
+					//checks if character has correct amt of coins
 					if(characters[y].coins >= this.cost){
 						characters[y].coins -= this.cost;
 						characters[y].max[data.status] += 5;
@@ -523,6 +589,9 @@ io.on("connection", function(socket){
 	})
 })
 
+//runs through and checks if characters need removed based on inactivity
+//every character has a "heartbeat" # that decreases every second.
+//if that # is at or below zero it is removed
 var heartBeatTester = setInterval(function(){
 	for(var x = characters.length - 1; x >= 0; x--){
 		characters[x].heartbeat -= 1;
@@ -532,6 +601,7 @@ var heartBeatTester = setInterval(function(){
 	}
 }, 1000)
 
+//removes the characters that have their "dead" attribute set to true
 function removeTheDead(){
 	for(var y = characters.length - 1; y >= 0; y--){
 		if(characters[y].died){
@@ -540,6 +610,8 @@ function removeTheDead(){
 	}
 }
 
+//creates an id by making a random id and checking to see if it already in use,
+//if it is it runs itself again (recursive)
 function makeID(){
 	this.id = Math.random()*20398475023;
 	for(var x = characters.length - 1; x >= 0; x--){
