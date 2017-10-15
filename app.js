@@ -22,7 +22,6 @@ app.use(express.static('public'))
 var characters = [];
 var bullets = [];
 var bubbles = [];
-var coins = [];
 
 //setting up dimensions to be used in the math of colision detection later
 var AmtOfSectionsAcross = 3;
@@ -424,33 +423,17 @@ function bulletCollisionDetection(){
 				//decrease that players health
 				this.char.health -= this.bull.damage;
 
-				//test to see if player is dead
-				if(this.char.health <= 0){
-					//tests to see if character has at least one coin, if not drop 1 coin
-					if(this.char.coins > 0){
-						//drop all coins the character had
-						for(var y = this.char.coins; y >= 0; y--){
-							createBubble("coin", true, this.char.x, this.char.y);
-						}
-					}else{
-						createBubble("coin", true, this.char.x, this.char.y);
-					}
-
-					//sends death to all players
-					io.sockets.emit("death", {deathID: this.char.deathID});
-
-					//find bullets owner and award the kill
+				//test if player is dead
+				if(checkDeath(this.char.id)){
 					for(var y = characters.length - 1; y >= 0; y--){
 						if(characters[y].id === this.bull.owner){
 							characters[y].kills += 1;
 						}
 					}
-					//remove dead player
-					 this.char.died = true;
 				}
+
 				//remove the bullet after it has hit something
 				bullets.splice(i, 1);
-
 			}
 		}
 	}
@@ -479,6 +462,29 @@ function updateCoins(){
 	}
 }
 
+function checkDeath(id){
+  for(var y = characters.length - 1; y >= 0; y--){
+    if(characters[y].id === id){
+      if(this.char.health <= 0){
+        //tests to see if character has at least one coin, if not drop 1 coin
+        if(this.char.coins > 0){
+          //drop all coins the character had
+          for(var y = this.char.coins; y >= 0; y--){
+            createBubble("coin", true, this.char.x, this.char.y);
+          }
+        }else{
+          createBubble("coin", true, this.char.x, this.char.y);
+        }
+        //sends death to all players
+        io.sockets.emit("death", {deathID: this.char.deathID});
+        //remove dead player
+         this.char.died = true;
+				 return true;
+      }
+    }
+  }
+}
+
 
 /*----------Socket.io----------*/
 //socket.io connections
@@ -489,7 +495,7 @@ io.on("connection", function(socket){
 	this.sendData = setInterval(function(){
 		//emiting the data 60 times a second
 
-		//clones the arrays, cannot just set equal as updating cleanedCharacter/Bullets would still 
+		//clones the arrays, cannot just set equal as updating cleanedCharacter/Bullets would still
 		//update the original due to how JS handles cloning. (Just makes references)
 		this.cleanedCharacters = JSON.parse(JSON.stringify(characters));
 		this.cleanedBullets = JSON.parse(JSON.stringify(bullets));
@@ -514,7 +520,7 @@ io.on("connection", function(socket){
 
 		socket.emit("data", {characters: this.cleanedCharacters, bullets: this.cleanedBullets,
 			bubbles: bubbles, characterDimensions: characterDimensions,
-			AmtOfSectionsAcross: AmtOfSectionsAcross, coins: coins
+			AmtOfSectionsAcross: AmtOfSectionsAcross
 		})
 	}, 1000/60)
 

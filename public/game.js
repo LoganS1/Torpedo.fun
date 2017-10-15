@@ -16,6 +16,7 @@ var mouseY = 0;
 var bullets = [];
 var characters = [];
 var bubbles = [];
+var started = false;
 var characterDimensions;
 var AmtOfSectionsAcross;
 
@@ -57,14 +58,16 @@ window.addEventListener("mousemove", function(e){
 function loop(){
 	findMe();
   requestAnimationFrame(loop);
-  c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
-	drawBackground();
-	drawBullets();
-  drawCharacters();
-	drawBubbles();
-  drawUI();
-	updateSection();
-	updateUpgradeUI();
+	if(started){
+	  c.clearRect(0, 0, canvasDimensions.width*AmtOfSectionsAcross, canvasDimensions.height*AmtOfSectionsAcross);
+		drawBackground();
+		drawBullets();
+	  drawCharacters();
+		drawBubbles();
+	  drawUI();
+		updateSection();
+		updateUpgradeUI();
+	}
 }
 
 loop();
@@ -73,6 +76,9 @@ function findMe(){
 	for(var y = characters.length - 1; y >= 0; y--){
 		if(characters[y].id === socket.id){
 			me = characters[y];
+			if(!started){
+				started = true;
+			}
 		}
 	}
 }

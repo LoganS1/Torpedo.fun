@@ -10,11 +10,11 @@ socket.on("data", function(data){
   bubbles = data.bubbles;
   characterDimensions = data.characterDimensions;
   AmtOfSectionsAcross = data.AmtOfSectionsAcross;
-  coins = data.coins;
 })
 
 socket.on("death", function(data){
   if(data.deathID === me.deathID){
+    started = false;
     clearInterval(sendData);
     splash.classList.remove("disappear");
     died.classList.remove("disappear");
