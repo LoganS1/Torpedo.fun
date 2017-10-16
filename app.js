@@ -43,6 +43,7 @@ var loop = setInterval(function(){
 	//updating entities
 	updateCharacters();
 	updateBullets();
+	updateBubbles();
 	//collision detections
 	characterCollisionDetection();
 	bubbleCollisionDetection();
@@ -51,8 +52,6 @@ var loop = setInterval(function(){
 	updateConsole();
 	//removing characters if they have been shot
 	removeTheDead();
-	//updating the rotation of the coins
-	updateCoins();
 
 }, 1000/60);
 
@@ -226,7 +225,7 @@ function newCharacter(data, socket){
 		//how many x/y cordinates can a character move per frame
 		speed: 4,
 		died: false,
-		coins: 0,
+		scrap: 0,
 		section: {
 			x: 1,
 			y: 1
@@ -258,7 +257,7 @@ var bubbleAmounts = {
 	ammo: 0,
 	speed: 0,
 	oxygen: 0,
-	coin: 0
+	scrap: 0
 };
 
 //sets an interval that creates creates bubbles based on time
@@ -275,10 +274,10 @@ var createBubbles = setInterval(function(){
 			createBubble("health");
 		}
 	}
-	if(createBubblesCount % 2 === 0){
-		if(bubbleAmounts.health < 27){
-			bubbleAmounts.health += 1;
-			createBubble("coin", false);
+	if(createBubblesCount % 5 === 0){
+		if(bubbleAmounts.scrap < 27){
+			bubbleAmounts.scrap += 1;
+			createBubble("scrap", false);
 		}
 	}
 	if(createBubblesCount % 5 === 0){
@@ -335,19 +334,21 @@ function createBubble(status, useXY, x, y){
 		x : Math.ceil(Math.random()* (canvasDimensions.width*AmtOfSectionsAcross - 100)) + 50, //creates an x cordinate that is 50 places away from a wall.
 		y : Math.ceil(Math.random()* (canvasDimensions.height*AmtOfSectionsAcross - 100)) + 50, //creates an y cordinate that is 50 places away from a wall.
 		status: status,
-		size: 10
+		size: 10,
+		up: false
 	}
-	//coins are created like bubbles but need more info
-	if(status === "coin"){
+	//scrap is created like bubbles but need more info
+	if(status === "scrap"){
 		if(useXY){
 			this.newBubble.x = x + Math.random()*20;
 			this.newBubble.y = y + Math.random()*20;
 		}
-		//used when spinning the coin, give the "Spinning" effect
-		this.newBubble.xRadius = this.newBubble.size;
-		//tells update function whether to increment above up or down
-		this.newBubble.up = false;
 	}
+
+	if(status === "oxygen"){
+		this.newBubble.y = canvasDimensions.height*AmtOfSectionsAcross;
+	}
+
 	//add the newly created bubble to the bubbles array
 	bubbles.push(this.newBubble);
 }
@@ -366,8 +367,8 @@ function bubbleCollisionDetection(){
 					case "speed": this.char.timers.speed += 5;
 						bubbleAmounts.speed -= 1;
 						break;
-					case "coin": this.char.coins += 1;
-						bubbleAmounts.coin -= 1;
+					case "scrap": this.char.scrap += 1;
+						bubbleAmounts.scrap -= 1;
 						break;
 					case "ammo": this.char.ammo += 10;
 						if(this.char.ammo > this.char.max.ammo){
@@ -390,6 +391,23 @@ function bubbleCollisionDetection(){
 				}
 				//removes hit bubble
 				bubbles.splice(i, 1);
+			}
+		}
+	}
+}
+
+function updateBubbles(){
+	for(var y = bubbles.length - 1; y >= 0; y--){
+		if(bubbles[y].status === "oxygen"){
+			bubbles[y].y -= 2;
+			if(Math.ceil(Math.random()*2) === 1){
+				bubbles[y].x += 1;
+			}else{
+				bubbles[y].x -= 1;
+			}
+
+			if(bubbles[y].y <= 100){
+				bubbles.splice(y, 1);
 			}
 		}
 	}
@@ -439,41 +457,18 @@ function bulletCollisionDetection(){
 	}
 }
 
-/*----------Coins----------*/
-
-//updates the spin of the coins
-function updateCoins(){
-	for(var x = bubbles.length - 1; x >= 0; x--){
-		//checks if the bubble is a coin
-		if(bubbles[x].status === "coin"){
-			if(bubbles[x].up){
-				bubbles[x].xRadius += 1;
-			}else{
-				bubbles[x].xRadius -= 1;
-			}
-
-			if(bubbles[x].xRadius >= bubbles[x].size){
-				bubbles[x].up = false
-			}else if(bubbles[x].xRadius <= bubbles[x].size / 5){
-				bubbles[x].up = true;
-			}
-		}
-
-	}
-}
-
 function checkDeath(id){
   for(var y = characters.length - 1; y >= 0; y--){
     if(characters[y].id === id){
       if(this.char.health <= 0){
-        //tests to see if character has at least one coin, if not drop 1 coin
-        if(this.char.coins > 0){
-          //drop all coins the character had
-          for(var y = this.char.coins; y >= 0; y--){
-            createBubble("coin", true, this.char.x, this.char.y);
+        //tests to see if character has at least one scrap, if not drop 1 scrap
+        if(this.char.scrap > 0){
+          //drop all scrap the character had
+          for(var y = this.char.scrap; y >= 0; y--){
+            createBubble("scrap", true, this.char.x, this.char.y);
           }
         }else{
-          createBubble("coin", true, this.char.x, this.char.y);
+          createBubble("scrap", true, this.char.x, this.char.y);
         }
         //sends death to all players
         io.sockets.emit("death", {deathID: this.char.deathID});
@@ -581,12 +576,12 @@ io.on("connection", function(socket){
 				if(data.status === "health" || data.status === "oxygen" || data.status === "ammo"){
 					//sets the cost
 					this.cost = characters[y].max[data.status] / 2;
-					//checks if character has correct amt of coins
-					if(characters[y].coins >= this.cost){
-						characters[y].coins -= this.cost;
+					//checks if character has correct amt of scrap
+					if(characters[y].scrap >= this.cost){
+						characters[y].scrap -= this.cost;
 						characters[y].max[data.status] += 5;
 					}else{
-						socket.emit("uh-oh", {error: "Not enough coins!"});
+						socket.emit("uh-oh", {error: "Not enough scrap!"});
 					}
 				}
 

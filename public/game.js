@@ -40,7 +40,7 @@ var canvasDimensions = {
 
 for(var x = upgradeItems.length - 1; x >= 0; x--){
 	upgradeItems[x].addEventListener("click", function(){
-		if(me.coins > me.max[this.id] / 2){
+		if(me.scrap >= me.max[this.id] / 2){
 			upgrade(this.id);
 		}
 	})
@@ -84,7 +84,7 @@ function findMe(){
 }
 
 function updateUpgradeUI(){
-	if(me.coins >= me.max.health / 2 || me.coins >= me.max.ammo / 2 || me.coins >= me.max.oxygen / 2){
+	if(me.scrap >= me.max.health / 2 || me.scrap >= me.max.ammo / 2 || me.scrap >= me.max.oxygen / 2){
 		unrollUpgradeBar();
 	}else{
 		rerollUpgradeBar();

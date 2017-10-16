@@ -20,9 +20,9 @@ function drawUI(){
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
-    c.fillText(this.currChar.name + " (" + this.currChar.coins + " Coins)", 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
+    c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
     c.textAlign = "center";
-    c.fillText(this.currChar.name + " (" + this.currChar.coins + " Coins)", this.currChar.x, this.currChar.y - 30);
+    c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", this.currChar.x, this.currChar.y - 30);
     if(this.currChar.timers.speed > 0){
       c.fillText("-Speed: " + this.currChar.timers.speed, this.currChar.x, this.currChar.y - 70);
     }
@@ -98,20 +98,31 @@ var bubbleColors = {
   ammo: "purple",
   speed: "blue",
   oxygen: "black",
-  coin: "rgb(240, 240, 0)"
+  scrap: "rgb(240, 240, 0)"
 }
 function drawBubbles(){
   for(var y = bubbles.length - 1; y >= 0; y--){
-    if(bubbles[y].status === "coin"){
+    if(bubbles[y].status === "scrap"){
       c.beginPath();
       c.fillStyle = bubbleColors[bubbles[y].status];
-      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].xRadius, bubbles[y].size, Math.PI/180, 0, 2*Math.PI);
+      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].size, bubbles[y].size, Math.PI/180, 0, 2*Math.PI);
       c.fill();
       c.beginPath();
-      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].xRadius / 1.8, bubbles[y].size / 1.8, Math.PI/180, 0, 2*Math.PI);
+      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].size / 1.8, bubbles[y].size / 1.8, Math.PI/180, 0, 2*Math.PI);
       c.fill();
       c.strokeStyle = "black";
       c.stroke();
+
+    }else if(bubbles[y].status === "oxygen"){
+      c.beginPath();
+      c.strokeStyle = bubbleColors[bubbles[y].status];
+      c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
+      c.stroke();
+      c.beginPath();
+      c.fillStyle = bubbleColors[bubbles[y].status];
+      c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      c.fill();
+
     }else{
       c.beginPath()
       c.fillStyle = bubbleColors[bubbles[y].status];
