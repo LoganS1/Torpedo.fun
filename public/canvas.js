@@ -26,21 +26,31 @@ function drawUI(){
     if(this.currChar.timers.speed > 0){
       c.fillText("-Speed: " + this.currChar.timers.speed, this.currChar.x, this.currChar.y - 70);
     }
+
+    this.oxygenBarValue = (50 / (this.currChar.max.oxygen)) * this.currChar.timers.oxygen;
+    this.ammoBarValue = (50 / (this.currChar.max.ammo)) * this.currChar.ammo;
+    this.healthBarValue = (50 / (this.currChar.max.health)) * this.currChar.health;
+
     //oxygen bar
+    c.font = "10px Arial"
     c.fillStyle = "grey";
     c.fillRect(this.currChar.x - 15, this.currChar.y -15, 50, 5);
     c.fillStyle = "white";
-    c.fillRect(this.currChar.x - 15, this.currChar.y - 15, this.currChar.timers.oxygen * 5, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 15, this.oxygenBarValue, 5);
+    c.fillText(this.currChar.timers.oxygen + " / " + this.currChar.max.oxygen, this.currChar.x + 55, this.currChar.y - 0)
     //health bar
     c.fillStyle = "grey";
     c.fillRect(this.currChar.x - 15, this.currChar.y - 20, 50, 5);
     c.fillStyle = "red";
-    c.fillRect(this.currChar.x - 15, this.currChar.y - 20, this.currChar.health * 5, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 20, this.healthBarValue, 5);
+    c.fillText(this.currChar.health + " / " + this.currChar.max.health, this.currChar.x + 55, this.currChar.y - 10)
     //ammo bar
     c.fillStyle = "grey";
     c.fillRect(this.currChar.x - 15, this.currChar.y - 25, 50, 5);
     c.fillStyle = "black";
-    c.fillRect(this.currChar.x - 15, this.currChar.y - 25, this.currChar.ammo * 5, 5);
+    c.fillRect(this.currChar.x - 15, this.currChar.y - 25, this.ammoBarValue, 5);
+    c.fillText(this.currChar.ammo + " / " + this.currChar.max.ammo, this.currChar.x + 55, this.currChar.y - 20)
+    c.font = "16px Arial";
     c.textAlign = "left";
     this.y += 30;
   }
