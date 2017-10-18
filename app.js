@@ -88,6 +88,9 @@ function updateCharacters(){
 
 		//"physics" for above water causing the character to fall back down
 		if(this.currChar.y <= 100){
+			if(this.currChar.y - this.currChar.mouseY < 25 && this.currChar.downV < 4){
+				this.currChar.downV = 4;
+			}
 			this.currChar.downV += .1;
 		}else{
 			this.currChar.downV = 0;
@@ -96,7 +99,7 @@ function updateCharacters(){
 		//tests to see if character has oxygen before updating position
 		if(this.currChar.noOxygen){
 			//if character has no oxygen simple raise the character up
-			this.currChar.y -= 1;
+			this.currChar.y -= 3;
 		}else{
 			//if the character does have oxygen
 			//Boundaries
@@ -292,20 +295,20 @@ var createBubbles = setInterval(function(){
 			createBubble("speed");
 		}
 	}
-	if(createBubblesCount % 5 === 0){
-		if(bubbleAmounts.oxygen < 18){
+	if(createBubblesCount % 2 === 0){
+		if(bubbleAmounts.oxygen < 100){
 			bubbleAmounts.oxygen += 1;
 			createBubble("oxygen");
 		}
 	}
 
 	//counter updating
-	createBubblesCount++;
+	createBubblesCount += 0.5;
 	if(createBubblesCount > 30){
 		createBubblesCount = 0;
 	}
 
-}, 1000);
+}, 500);
 
 //sets an interval the lowers the "timers" of abilities on each character
 //also applies consequences of the timers

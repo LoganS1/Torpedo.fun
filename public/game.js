@@ -51,8 +51,8 @@ canvas.addEventListener("click", function(){
 })
 
 window.addEventListener("mousemove", function(e){
-    mouseX = (e.x - ((window.innerWidth / 2) - (canvas.width / 2))) + canvasDimensions.width * currSection.x;
-    mouseY = ((e.y) + canvasDimensions.height * currSection.y) - canvas.offsetTop;
+    mouseX = (e.x - ((window.innerWidth / 2) - (canvas.width / 2))) + canvasDimensions.width * me.section.x;
+    mouseY = ((e.y) + canvasDimensions.height * me.section.y) - canvas.offsetTop;
   })
 
 function loop(){
@@ -65,8 +65,9 @@ function loop(){
 	  drawCharacters();
 		drawBubbles();
 	  drawUI();
-		updateSection();
+		drawMiniMap();
 		updateUpgradeUI();
+		updateSection();
 	}
 }
 

@@ -20,7 +20,7 @@ function drawUI(){
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
-    c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", 10 + canvasDimensions.width * currSection.x, this.y + canvasDimensions.height * currSection.y);
+    c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", 10 + canvasDimensions.width * me.section.x, this.y + canvasDimensions.height * me.section.y);
     c.textAlign = "center";
     c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", this.currChar.x, this.currChar.y - 30);
     if(this.currChar.timers.speed > 0){
@@ -153,6 +153,45 @@ function drawBullets(){
     c.fill();
   }
 }
+
+function drawMiniMap(){
+  this.xOffSet = 20;
+  this.yOffSet = 20;
+  this.miniMapSize = 40;
+  this.miniMapThickness = 2;
+  this.barLength = this.miniMapSize * AmtOfSectionsAcross;
+  this.xCounter = 0;
+  this.yCounter = 0;
+
+  for(var y = 0; y <= AmtOfSectionsAcross; y++){
+    c.beginPath();
+
+    c.fillRect(this.xOffSet + this.xCounter + (canvasDimensions.width * me.section.x),
+    this.yOffSet + (canvasDimensions.height * me.section.y),
+    this.miniMapThickness,
+    this.barLength);
+
+    c.fillRect(this.xOffSet + (canvasDimensions.width * me.section.x),
+    this.yOffSet + this.yCounter + (canvasDimensions.height * me.section.y),
+    this.barLength,
+    this.miniMapThickness);
+
+    this.xCounter += this.miniMapSize;
+    this.yCounter += this.miniMapSize;
+  }
+
+  for(var y = characters.length - 1; y >= 0; y--){
+    c.beginPath();
+    c.fillStyle = "rgba(255, 0, 0, 0.2)";
+    if(characters[y].id != "n/a"){
+      c.fillStyle = "rgba(0, 0, 255, 0.5)";
+    }
+      this.x1 = this.xOffSet + (this.miniMapThickness + (this.miniMapSize * characters[y].section.x)) + (canvasDimensions.width * me.section.x);
+      this.y1 = this.yOffSet + (this.miniMapThickness + (this.miniMapSize * characters[y].section.y)) + (canvasDimensions.width * me.section.y);
+    c.fillRect(this.x1, this.y1, this.miniMapSize, this.miniMapSize);
+  }
+}
+
 
 function drawBackground(){
   c.fillStyle = "lightblue";
