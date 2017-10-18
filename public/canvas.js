@@ -17,16 +17,19 @@ function drawUI(){
   for(var t = characters.length - 1; t >= 0; t--){
     this.currChar = characters[t];
 
+//draw leaderboard
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
-    c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", 10 + canvasDimensions.width * me.section.x, this.y + canvasDimensions.height * me.section.y);
+    c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap / " + this.currChar.kills + " Kills)", 10 + canvasDimensions.width * me.section.x + canvasDimensions.width - 250, this.y + canvasDimensions.height * me.section.y);
     c.textAlign = "center";
+    //draw character names
     c.fillText(this.currChar.name + " (" + this.currChar.scrap + " Scrap)", this.currChar.x, this.currChar.y - 30);
     if(this.currChar.timers.speed > 0){
       c.fillText("-Speed: " + this.currChar.timers.speed, this.currChar.x, this.currChar.y - 70);
     }
 
+//draw character bars
     this.oxygenBarValue = (50 / (this.currChar.max.oxygen)) * this.currChar.timers.oxygen;
     this.ammoBarValue = (50 / (this.currChar.max.ammo)) * this.currChar.ammo;
     this.healthBarValue = (50 / (this.currChar.max.health)) * this.currChar.health;

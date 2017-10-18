@@ -100,46 +100,50 @@ function updateCharacters(){
 		if(this.currChar.noOxygen){
 			//if character has no oxygen simple raise the character up
 			this.currChar.y -= 3;
+			this.noOxygenXSpeed = 0.5;
+			this.noOxygenYSpeed = 0;
 		}else{
-			//if the character does have oxygen
-			//Boundaries
-			//keeps the characters in the playable area.
-			if(this.currChar.x > canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width){
-				this.currChar.x = canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width;
-			}
-
-			if(this.currChar.x < characterDimensions.width){
-				this.currChar.x = characterDimensions.width;
-			}
-
-			if(this.currChar.y > canvasDimensions.height * AmtOfSectionsAcross - characterDimensions.height){
-				this.currChar.y = canvasDimensions.height * AmtOfSectionsAcross - characterDimensions.height;
-			}
-
-			if(this.currChar.y < characterDimensions.height){
-				this.currChar.y = characterDimensions.height;
-			}
-
-			//movement
-			//moves the player to the mouse cordinates.
-			//updating x cordinates
-			if(this.currChar.x - 25 < this.currChar.mouseX){
-	      this.currChar.x += this.currChar.speed;
-	    }
-	    if(this.currChar.x + 50 > this.currChar.mouseX){
-	      this.currChar.x -= this.currChar.speed;
-	    }
-
-		    //updating y cordinates
-			this.currChar.y += this.currChar.downV;
-			if(this.currChar.y - 25 < this.currChar.mouseY){
-	      this.currChar.y += this.currChar.speed;
-	    }
-	    if(this.currChar.y + 50 > this.currChar.mouseY){
-	      this.currChar.y -= this.currChar.speed;
-	    }
-
+			this.noOxygenXSpeed = 1;
+			this.noOxygenYSpeed = 1;
 		}
+		//if the character does have oxygen
+		//Boundaries
+		//keeps the characters in the playable area.
+		if(this.currChar.x > canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width){
+			this.currChar.x = canvasDimensions.width * AmtOfSectionsAcross - characterDimensions.width;
+		}
+
+		if(this.currChar.x < characterDimensions.width){
+			this.currChar.x = characterDimensions.width;
+		}
+
+		if(this.currChar.y > canvasDimensions.height * AmtOfSectionsAcross - characterDimensions.height){
+			this.currChar.y = canvasDimensions.height * AmtOfSectionsAcross - characterDimensions.height;
+		}
+
+		if(this.currChar.y < characterDimensions.height){
+			this.currChar.y = characterDimensions.height;
+		}
+
+		//movement
+		//moves the player to the mouse cordinates.
+		//updating x cordinates
+		if(this.currChar.x - 25 < this.currChar.mouseX){
+      this.currChar.x += this.currChar.speed * this.noOxygenXSpeed;
+    }
+    if(this.currChar.x + 50 > this.currChar.mouseX){
+      this.currChar.x -= this.currChar.speed * this.noOxygenXSpeed;
+    }
+
+	    //updating y cordinates
+		this.currChar.y += this.currChar.downV;
+		if(this.currChar.y - 25 < this.currChar.mouseY){
+      this.currChar.y += this.currChar.speed * this.noOxygenYSpeed;
+    }
+    if(this.currChar.y + 50 > this.currChar.mouseY){
+      this.currChar.y -= this.currChar.speed * this.noOxygenYSpeed;
+    }
+
     this.currChar.rotation = Math.atan2((this.currChar.y + characterDimensions.height / 2) - this.currChar.mouseY,
 		//calculates the rotation of the player based on players and mouses cordinates
     	(this.currChar.x + characterDimensions.width / 2) - this.currChar.mouseX);
@@ -210,8 +214,8 @@ function updateCharacters(){
 //creates a new character when a client joins
 function newCharacter(data, socket){
 	characters.push({
-		x: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
-		y: Math.ceil(Math.random() * (canvasDimensions.width - 1)) * AmtOfSectionsAcross,
+		x: Math.ceil(Math.random() * (canvasDimensions.width - 50)) * AmtOfSectionsAcross,
+		y: Math.ceil(Math.random() * (canvasDimensions.height - 50)) * AmtOfSectionsAcross,
 		color: "rgb(" + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ", " + Math.ceil(Math.random()*254) + ")",
 		name: data.name,
 		deaths: 0,

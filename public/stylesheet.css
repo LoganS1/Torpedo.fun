@@ -46,7 +46,7 @@ html, body {
   border-radius: 10px;
   width: 20%;
   height: 30px;
-  margin: 5% 40%;
+  margin: 0% 40%;
 }
 
 .disappear {
@@ -110,4 +110,8 @@ h1, h2, h3, h4, p {
 
 #ammo {
   background-color: purple;
+}
+
+#instructions {
+  margin: 5% 20%;
 }
