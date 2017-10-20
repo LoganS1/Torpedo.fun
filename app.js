@@ -5,7 +5,7 @@ var express = require("express"),
 	io 		= require("socket.io")(server);
 
 //setting up server to listen
-server.listen(3000, function(){
+server.listen(80, function(){
 	console.log("The Server has started!")
 });
 
@@ -541,7 +541,7 @@ io.on("connection", function(socket){
 		}
 		if(!this.found){
 			if(data.name === "" || data.name.length > 12){
-				data.name = "torpedoed.io";
+				data.name = "torpedoed.fun";
 				socket.emit("uh-oh", {error: "Username null or too long, setting default username..."});
 			}
 			newCharacter(data, socket);
