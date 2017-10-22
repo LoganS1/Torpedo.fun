@@ -6,7 +6,7 @@ var express = require("express"),
 
 //setting up server to listen
 server.listen(80, function(){
-	console.log("The Server has started!")
+	process.stdout.write("\033c");
 });
 
 //tells express to send index.html to root of website
@@ -62,7 +62,11 @@ var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumb
 
 //updating the console with server info (FPS, Amt of Players, and Player Names)
 function updateConsole(){
-	console.log("FPS: " + fps.getFPS() + "\nPlayers Connected: " + characters.length + "\n" + createPlayerList());
+	for(var y = characters.length - 1; y >= -2; y--){
+		process.stdout.write("\033[1A");
+	}
+	process.stdout.write("\033[K");
+	process.stdout.write("FPS: " + fps.getFPS() + "\nPlayers Connected: " + characters.length + "\n" + createPlayerList());
 }
 
 //creates the player list to be used in updateConsole();
@@ -605,6 +609,7 @@ var heartBeatTester = setInterval(function(){
 		characters[x].heartbeat -= 1;
 		if(characters[x].heartbeat <= 0){
 			characters.splice(x, 1);
+			process.stdout.write("\033c");
 		}
 	}
 }, 1000)
@@ -614,6 +619,7 @@ function removeTheDead(){
 	for(var y = characters.length - 1; y >= 0; y--){
 		if(characters[y].died){
 			characters.splice(y, 1);
+			process.stdout.write("\033c");
 		}
 	}
 }
