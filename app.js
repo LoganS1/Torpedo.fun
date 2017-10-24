@@ -419,6 +419,7 @@ function updateBubbles(){
 
 			if(bubbles[y].y <= 100){
 				bubbles.splice(y, 1);
+				bubbleAmounts.oxygen--;
 			}
 		}
 	}
