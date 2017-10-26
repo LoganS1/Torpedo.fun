@@ -285,8 +285,8 @@ var createBubbles = setInterval(function(){
 			createBubble("health");
 		}
 	}
-	if(createBubblesCount % 5 === 0){
-		if(bubbleAmounts.scrap < 27){
+	if(createBubblesCount % 2 === 0){
+		if(bubbleAmounts.scrap < (27 * characters.length)){
 			bubbleAmounts.scrap += 1;
 			createBubble("scrap", false);
 		}
