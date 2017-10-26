@@ -132,19 +132,19 @@ function updateCharacters(){
 		//movement
 		//moves the player to the mouse cordinates.
 		//updating x cordinates
-		if(this.currChar.x - 25 < this.currChar.mouseX){
+		if(this.currChar.x - 10 < this.currChar.mouseX){
       this.currChar.x += this.currChar.speed * this.noOxygenXSpeed;
     }
-    if(this.currChar.x + 50 > this.currChar.mouseX){
+    if(this.currChar.x + 20 > this.currChar.mouseX){
       this.currChar.x -= this.currChar.speed * this.noOxygenXSpeed;
     }
 
 	    //updating y cordinates
 		this.currChar.y += this.currChar.downV;
-		if(this.currChar.y - 25 < this.currChar.mouseY){
+		if(this.currChar.y - 10 < this.currChar.mouseY){
       this.currChar.y += this.currChar.speed * this.noOxygenYSpeed;
     }
-    if(this.currChar.y + 50 > this.currChar.mouseY){
+    if(this.currChar.y + 20 > this.currChar.mouseY){
       this.currChar.y -= this.currChar.speed * this.noOxygenYSpeed;
     }
 
