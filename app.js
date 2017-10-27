@@ -535,6 +535,12 @@ io.on("connection", function(socket){
 	//updates characters information based on received data
 	socket.on("data", function(data){
 		this.found = false;
+		if(typeof data.mouseX != "number"){
+			data.mouseX = 0;
+		}
+		if(typeof data.mouseY != "number"){
+			data.mouseY = 0;
+		}
 		//checks to see if the player is a new player
 		for(var x = characters.length - 1; x >= 0; x--){
 			if(characters[x].id == socket.id){
