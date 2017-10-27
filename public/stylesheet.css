@@ -7,14 +7,13 @@
   -ms-user-select: none;
 }
 canvas {
-  border: 1px solid black;
   display: block;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   cursor: crosshair;
-  margin: auto;
   border-radius: 10px;
   border: 10px solid grey;
+  height: 80%;
 }
 html, body {
   width: 100%;
@@ -46,7 +45,7 @@ html, body {
 #title{
   color: darkgrey;
   text-align: center;
-  height: 50px;
+  height: 30px;
 }
 
 #enter{

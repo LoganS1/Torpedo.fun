@@ -51,8 +51,10 @@ canvas.addEventListener("click", function(){
 })
 
 window.addEventListener("mousemove", function(e){
-    mouseX = (e.x - ((window.innerWidth / 2) - (canvas.width / 2))) + canvasDimensions.width * me.section.x;
-    mouseY = ((e.y) + canvasDimensions.height * me.section.y) - canvas.offsetTop;
+	mouseX = (canvasDimensions.width/canvas.clientWidth) * (e.x - canvas.offsetLeft + canvas.clientWidth * me.section.x) - 10;
+	mouseY = (canvasDimensions.height/canvas.clientHeight) * (e.y - canvas.offsetTop + canvas.clientHeight * me.section.y) - 10;
+    // mouseX = (e.x - ((window.innerWidth / 2) - (canvas.width / 2))) + canvasDimensions.width * me.section.x ;
+    // mouseY = ((e.y) + canvasDimensions.height * (canvasDimensions.height/canvas.clientHeight) * me.section.y) - canvas.offsetTop;
   })
 
 function loop(){
