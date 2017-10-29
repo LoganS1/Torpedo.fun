@@ -16,6 +16,7 @@ app.get("/", function(req, res){
 
 //tells express to allow index.html to grab resources from the "public" file
 app.use(express.static('public'))
+app.disable('x-powered-by');
 
 //Game mechanics
 //setting up array that will hold all positions/statuses
