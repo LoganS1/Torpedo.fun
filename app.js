@@ -553,7 +553,7 @@ io.on("connection", function(socket){
 		}
 		if(!this.found){
 			if(data.name === "" || data.name.length > 12){
-				data.name = "torpedoed.fun";
+				data.name = "Guest";
 				socket.emit("uh-oh", {error: "Username null or too long, setting default username..."});
 			}
 			newCharacter(data, socket);
@@ -606,6 +606,9 @@ io.on("connection", function(socket){
 
 			}
 		}
+	})
+	socket.on("chat", function(message){
+		io.sockets.emit("chat", {message: message.message});
 	})
 })
 

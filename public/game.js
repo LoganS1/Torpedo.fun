@@ -8,6 +8,9 @@ var oxygenCost = document.getElementById("oxygenCost");
 var ammoCost = document.getElementById("ammoCost");
 var upgradeItems = document.getElementsByClassName("upgradeItems");
 var upgradeList = document.getElementById("upgradeList");
+var chat = document.getElementById("chat");
+var chatInput = document.getElementById("chatInput");
+var chatBox = document.getElementById("chatBox");
 
 var name;
 var me;
@@ -96,3 +99,9 @@ function updateUpgradeUI(){
 	oxygenCost.innerHTML = me.max.oxygen / 2;
 	healthCost.innerHTML = me.max.health / 2;
 }
+
+chatInput.addEventListener("keyup", function(e){
+	if(e.keyCode === 13){
+		sendMsg();
+	}
+})

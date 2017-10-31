@@ -22,8 +22,8 @@
         <h4>Options</h4>
         <p>Coming Soon!</p>
       </div>
-      <h2 id="died" class="disappear">YOU DIED</h2>
-      <h2 id="kills" class="disappear"></h2>
+      <h2 id="died" class="">YOU DIED</h2>
+      <h2 id="kills" class=""></h2>
       <input id="input" type="text" name="name" placeholder="Nickname">
       <br>
       <button id="enter" onclick="enter()" type="button" name="Enter">Enter</button>
@@ -40,6 +40,16 @@
     <canvas id="myCanvas">
       oh-nooo! Your browser does not support canvas! :'(
     </canvas>
+    <button id="showChat" class="disappear" onclick="document.getElementById('chat').classList.remove('disappear'); document.getElementById('hideChat').classList.remove('disappear'); document.getElementById('showChat').classList.add('disappear');">Show Chat</button>
+    <div id="chat" class="disappear">
+      <div id="chatBox">
+        <span class="chatMsg">Welcome to Chat!</span><br />
+        <span class="chatMsg">This chat is in Beta! The look and functionality probably WILL change!</span><br />
+      </div>
+        <input id="chatInput" type="text" name="message" placeholder="Chat Here!">
+        <button id="chatButton" onclick="sendMsg();">Send Message</button>
+        <button id="hideChat" onclick="document.getElementById('chat').classList.add('disappear'); document.getElementById('showChat').classList.remove('disappear');">Hide Chat</button>
+    </div>
 
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="socketio.js"></script>

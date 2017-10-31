@@ -130,7 +130,56 @@ h1, h2, h3, h4, p {
 }
 
 #options {
+  text-align: center;
   float: right;
   display: inline-block;
   width: 49%;
+}
+
+#chat {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: lightgrey;
+  width: 20%;
+  height: 100%;
+}
+
+#chatBox {
+  margin: 2px auto;
+  padding: 5px;
+  background-color: grey;
+  width: 100%;
+  height: 75%;
+  float: right;
+  overflow: scroll;
+}
+
+#chatInput {
+  width: 100%;
+  height: 50px;
+  float: right;
+}
+
+#chatButton {
+  width: 100%;
+  height: 5%;
+}
+
+.chatMsg {
+  color: black;
+  background-color: white;
+  width: 100%
+}
+
+#hideChat {
+  width: 100%;
+  height: 5%;
+}
+
+#showChat {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 10%;
 }
