@@ -120,5 +120,17 @@ h1, h2, h3, h4, p {
 }
 
 #instructions {
-  margin: 5% 20%;
+  padding: 0;
+}
+
+#controls {
+  text-align: center;
+  display: inline-block;
+  width: 49%;
+}
+
+#options {
+  float: right;
+  display: inline-block;
+  width: 49%;
 }
