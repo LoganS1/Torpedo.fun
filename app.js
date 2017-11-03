@@ -237,7 +237,7 @@ function newCharacter(data, socket){
 		//how many x/y cordinates can a character move per frame
 		speed: 4,
 		died: false,
-		scrap: 0,
+		scrap: 5,
 		section: {
 			x: 1,
 			y: 1
@@ -498,7 +498,6 @@ function checkDeath(id){
 //socket.io connections
 io.on("connection", function(socket){
 	socket.emit("connection", {connection: "successful"});
-
 	//send data
 	this.sendData = setInterval(function(){
 		//emiting the data 60 times a second
@@ -567,13 +566,14 @@ io.on("connection", function(socket){
 			if(characters[y].id == data.owner){
 				if(characters[y].ammo >= 1){
 					this.speed = 15;
+					this.size = 5;
 				  this.dx = characters[y].mouseX - (characters[y].x + characterDimensions.width / 2);
 				  this.dy = characters[y].mouseY - (characters[y].y + characterDimensions.height / 2);
 				  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
 				  this.vx = (this.dx / this.mag) * this.speed;
 				  this.vy = (this.dy / this.mag) * this.speed;
 					this.x = (characters[y].x + characterDimensions.width / 2) + this.vx;
-					this.y = (characters[y].y + characterDimensions.height / 2) + this.vy;
+					this.y = (characters[y].y + characterDimensions.height / 2) + this.vy
 					bullets.push({
 						x: this.x,
 						y: this.y,
@@ -581,7 +581,7 @@ io.on("connection", function(socket){
 						yIncr: this.vy,
 						damage: characters[y].damage,
 						owner: data.owner,
-						size: 5
+						size: this.size
 					});
 					characters[y].ammo -= 1;
 				}
@@ -608,7 +608,11 @@ io.on("connection", function(socket){
 		}
 	})
 	socket.on("chat", function(message){
-		io.sockets.emit("chat", {message: message.message});
+		characters.forEach(function(char){
+			if(char.id === socket.id){
+				io.sockets.emit("chat", {message: message.message, name: char.name, color: char.color});
+			}
+		})
 	})
 })
 

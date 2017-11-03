@@ -105,3 +105,9 @@ chatInput.addEventListener("keyup", function(e){
 		sendMsg();
 	}
 })
+
+input.addEventListener("keyup", function(e){
+	if(e.keyCode === 13){
+		enter();
+	}
+})

@@ -8,7 +8,7 @@
   <body>
     <h1 id="title"> Torpedoed.fun </h1>
     <div id="splash">
-      <h1>Torpedoed.fun</h1>
+      <h1>Welcome!</h1>
       <div id="controls">
         <h4>Controls</h4>
         <p id="instructions">Your "Submarine" will follow your mouse. Click to fire, but beware you
@@ -22,25 +22,28 @@
         <h4>Options</h4>
         <p>Coming Soon!</p>
       </div>
-      <h2 id="died" class="">YOU DIED</h2>
-      <h2 id="kills" class=""></h2>
-      <input id="input" type="text" name="name" placeholder="Nickname">
+      <h2 id="died" class="disappear">YOU DIED</h2>
+      <h2 id="kills" class="disappear"></h2>
+      <input id="input" type="text" name="name" placeholder="Guest" autocomplete="off">
       <br>
       <button id="enter" onclick="enter()" type="button" name="Enter">Enter</button>
     </div>
 
-    <div id="upgradesBar" class="disappear">Upgrades</div>
-
-    <div id="upgradeList" class="disappear">
-      <button id="health" class="upgradeItems">Health: <span id="healthCost">?</span></button>
-      <button id="oxygen" class="upgradeItems middleItem">Oxygen: <span id="oxygenCost">?</span></button>
-      <button id="ammo" class="upgradeItems">Ammo: <span id="ammoCost">?</span></button>
+    <div id="upgradesBar" class="disappear">
+      <span>Upgrades</span>
+      <div id="upgradeList" class="disappear">
+        <button id="health" class="upgradeItems">Health: <span id="healthCost">?</span></button>
+        <button id="oxygen" class="upgradeItems middleItem">Oxygen: <span id="oxygenCost">?</span></button>
+        <button id="ammo" class="upgradeItems">Ammo: <span id="ammoCost">?</span></button>
+      </div>
     </div>
+
+
 
     <canvas id="myCanvas">
       oh-nooo! Your browser does not support canvas! :'(
     </canvas>
-    <button id="showChat" class="disappear" onclick="document.getElementById('chat').classList.remove('disappear'); document.getElementById('hideChat').classList.remove('disappear'); document.getElementById('showChat').classList.add('disappear');">Show Chat</button>
+    <button id="showChat" class="disappear" onclick="document.getElementById('chat').classList.remove('disappear'); document.getElementById('hideChat').classList.remove('disappear'); document.getElementById('showChat').classList.add('disappear');">/\</button>
     <div id="chat" class="disappear">
       <div id="chatBox">
         <span class="chatMsg">Welcome to Chat!</span><br />
@@ -48,7 +51,7 @@
       </div>
         <input id="chatInput" type="text" name="message" placeholder="Chat Here!">
         <button id="chatButton" onclick="sendMsg();">Send Message</button>
-        <button id="hideChat" onclick="document.getElementById('chat').classList.add('disappear'); document.getElementById('showChat').classList.remove('disappear');">Hide Chat</button>
+        <button id="hideChat" onclick="document.getElementById('chat').classList.add('disappear'); document.getElementById('showChat').classList.remove('disappear');">\/</button>
     </div>
 
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>

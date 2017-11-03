@@ -18,6 +18,8 @@ socket.on("death", function(data){
     clearInterval(sendData);
     splash.classList.remove("disappear");
     chat.classList.add("disappear");
+    died.classList.remove("disappear");
+    kill.classList.remove("disappear");
     kills.innerHTML = me.kills + " Kills";
   }
 })
@@ -28,10 +30,15 @@ socket.on("uh-oh", function(data){
 
 socket.on("chat", function(message){
   this.span = document.createElement("span");
+  this.nameSpan = document.createElement("span");
   this.span.innerText = message.message;
-  console.log(message);
+  this.nameSpan.innerText = message.name + ": ";
   this.span.classList.add("chatMsg");
-  chatBox.append(this.span);
+  this.nameSpan.classList.add("chatName");
+  this.nameSpan.append(this.span);
+  this.nameSpan.style.color = message.color;
+  console.log(message.color);
+  chatBox.append(this.nameSpan);
   chatBox.append(document.createElement("br"));
   chatBox.scrollTo(0, 100000);
 })
@@ -41,7 +48,7 @@ function upgrade(status){
 }
 
 function sendMsg(){
-  this.msgToSend = name + ": " + chatInput.value;
+  this.msgToSend = chatInput.value;
   socket.emit("chat", {message: this.msgToSend});
   chatInput.value = "";
 }
