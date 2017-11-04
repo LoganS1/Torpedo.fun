@@ -13,7 +13,7 @@ canvas {
   cursor: crosshair;
   border-radius: 10px;
   border: 10px solid grey;
-  height: 80%;
+  height: 75%;
 }
 html, body {
   width: 100%;
@@ -57,7 +57,7 @@ html, body {
   width: 20%;
   height: 5%;
   margin: 10px 40%;
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .disappear {
@@ -179,7 +179,7 @@ h1, h2, h4 {
   margin: 2px 0;
   display: inline-block;
   animation-name: newMsg;
-  animation-duration: 1s;
+  animation-duration: 0.2s;
 }
 
 .chatName {
@@ -210,8 +210,6 @@ button:hover {
 
 @keyframes  newMsg {
   0% {font-size: 1em;}
-  25% {font-size: 1.5em;}
-  50% {font-size: 0.75em;}
-  75% {font-size: 1.25em}
+  50% {font-size: 1.1em;}
   100% {font-size: 1em;}
 }

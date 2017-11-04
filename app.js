@@ -61,7 +61,7 @@ function adjustLoopInterval(){
 		loopInterval--;
 		clearInterval(timer);
 		timer = setInterval(loop, 1000/loopInterval);
-	}else if(fps < 55){
+	}else if(fps < 55 && loopInterval < 1000){
 		loopInterval++;
 		clearInterval(timer);
 		timer = setInterval(loop, 1000/loopInterval);
@@ -613,7 +613,7 @@ io.on("connection", function(socket){
 						characters[y].scrap -= this.cost;
 						characters[y].max[data.status] += 5;
 					}else{
-						socket.emit("uh-oh", {error: "Not enough scrap!"});
+						socket.emit("uh-oh", {error: "Not enough scrap!", reason: "Anti-Cheat"});
 					}
 				}
 
@@ -621,11 +621,15 @@ io.on("connection", function(socket){
 		}
 	})
 	socket.on("chat", function(message){
-		characters.forEach(function(char){
-			if(char.id === socket.id){
-				io.sockets.emit("chat", {message: message.message, name: char.name, color: char.color});
-			}
-		})
+		if(message.message === ""){
+			socket.emit("uh-oh", {error: "Message can not be blank!", reason: "Anti-Spam"});
+		}else{
+			characters.forEach(function(char){
+				if(char.id === socket.id){
+					io.sockets.emit("chat", {message: message.message, name: char.name, color: char.color});
+				}
+			})
+		}
 	})
 })
 

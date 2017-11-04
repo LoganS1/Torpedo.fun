@@ -111,3 +111,17 @@ input.addEventListener("keyup", function(e){
 		enter();
 	}
 })
+
+function createMsg(name, color, message){
+	this.span = document.createElement("span");
+  this.nameSpan = document.createElement("span");
+  this.span.innerText = message;
+  this.nameSpan.innerText = name + ": ";
+  this.span.classList.add("chatMsg");
+  this.nameSpan.classList.add("chatName");
+  this.nameSpan.append(this.span);
+  this.nameSpan.style.color = color;
+  chatBox.append(this.nameSpan);
+  chatBox.append(document.createElement("br"));
+  chatBox.scrollTo(0, 100000);
+}

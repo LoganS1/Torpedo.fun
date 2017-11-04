@@ -25,22 +25,11 @@ socket.on("death", function(data){
 })
 
 socket.on("uh-oh", function(data){
-  console.log(data.error);
+  createMsg(data.reason, "red", data.error);
 })
 
 socket.on("chat", function(message){
-  this.span = document.createElement("span");
-  this.nameSpan = document.createElement("span");
-  this.span.innerText = message.message;
-  this.nameSpan.innerText = message.name + ": ";
-  this.span.classList.add("chatMsg");
-  this.nameSpan.classList.add("chatName");
-  this.nameSpan.append(this.span);
-  this.nameSpan.style.color = message.color;
-  console.log(message.color);
-  chatBox.append(this.nameSpan);
-  chatBox.append(document.createElement("br"));
-  chatBox.scrollTo(0, 100000);
+  createMsg(message.name, message.color, message.message);
 })
 
 function upgrade(status){
