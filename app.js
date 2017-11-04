@@ -40,26 +40,39 @@ var characterDimensions = {
 }
 
 //loop that updates and sends out positions
-var loop = setInterval(function(){
-	//updating entities
+var loopInterval = 60;
+var timer = setInterval(loop, 1000/loopInterval);
+
+function loop() {
 	updateCharacters();
 	updateBullets();
 	updateBubbles();
-	//collision detections
 	characterCollisionDetection();
 	bubbleCollisionDetection();
 	bulletCollisionDetection();
-	//updating console with server info
 	updateConsole();
-	//removing characters if they have been shot
-	removeTheDead();
+	removeTheDead();;
+	adjustLoopInterval();
+	fps = FPS.getFPS();
+}
 
-}, 1000/60);
+function adjustLoopInterval(){
+	if(fps > 65){
+		loopInterval--;
+		clearInterval(timer);
+		timer = setInterval(loop, 1000/loopInterval);
+	}else if(fps < 55){
+		loopInterval++;
+		clearInterval(timer);
+		timer = setInterval(loop, 1000/loopInterval);
+	}
+}
 
 //fps object that can be used to get fps
-var fps = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),
+var FPS = {	startTime : 0,	frameNumber : 0,	getFPS : function(){		this.frameNumber++;		var d = new Date().getTime(),
 			currentTime = ( d - this.startTime ) / 1000,			result = Math.floor( ( this.frameNumber / currentTime ) );
 			if( currentTime > 1 ){			this.startTime = new Date().getTime();			this.frameNumber = 0;		}		return result;	}	};
+var fps = 0;
 
 //updating the console with server info (FPS, Amt of Players, and Player Names)
 function updateConsole(){
@@ -67,7 +80,7 @@ function updateConsole(){
 		process.stdout.write("\033[1A");
 	}
 	process.stdout.write("\033[K");
-	process.stdout.write("FPS: " + fps.getFPS() + "\nPlayers Connected: " + characters.length + "\n" + createPlayerList());
+	process.stdout.write("FPS: " + fps + " - Loop Interval: " + loopInterval + "\nPlayers Connected: " + characters.length + "\n" + createPlayerList());
 }
 
 //creates the player list to be used in updateConsole();
@@ -237,7 +250,7 @@ function newCharacter(data, socket){
 		//how many x/y cordinates can a character move per frame
 		speed: 4,
 		died: false,
-		scrap: 5,
+		scrap: 0,
 		section: {
 			x: 1,
 			y: 1
