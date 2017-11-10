@@ -511,6 +511,7 @@ function checkDeath(id){
 //socket.io connections
 io.on("connection", function(socket){
 	socket.emit("connection", {connection: "successful"});
+	socket.chatTimer = 0;
 	//send data
 	this.sendData = setInterval(function(){
 		//emiting the data 60 times a second
@@ -621,16 +622,22 @@ io.on("connection", function(socket){
 		}
 	})
 	socket.on("chat", function(message){
-		if(message.message === ""){
-			socket.emit("uh-oh", {error: "Message can not be blank!", reason: "Anti-Spam"});
+		if(socket.chatTimer > 0){
+			socket.emit("uh-oh", {error: "Please wait " + socket.chatTimer + " second(s) before sending another message", reason: "Anti-Spam"});
 		}else{
 			characters.forEach(function(char){
 				if(char.id === socket.id){
+					socket.chatTimer = 2;
 					io.sockets.emit("chat", {message: message.message, name: char.name, color: char.color});
 				}
 			})
 		}
 	})
+	socket.chatTimerClock = setInterval(function(){
+		if(socket.chatTimer > 0){
+			socket.chatTimer -= 0.5;
+		}
+	}, 500)
 })
 
 //runs through and checks if characters need removed based on inactivity
