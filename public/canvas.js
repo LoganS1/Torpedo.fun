@@ -187,6 +187,7 @@ function drawMiniMap(){
     c.beginPath();
     c.fillStyle = "rgba(255, 0, 0, 0.2)";
     if(characters[y].id != "n/a"){
+      //this checks if current character is "me"
       c.fillStyle = "rgba(0, 0, 255, 0.5)";
     }
       this.x1 = this.xOffSet + (this.miniMapThickness + (this.miniMapSize * characters[y].section.x)) + (canvasDimensions.width * me.section.x);

@@ -241,7 +241,7 @@ function newCharacter(data, socket){
 		health: 10,
 		id: socket.id,
 		deathID: makeID(),
-		ammo: 10,
+		ammo: 20,
 		rotation: 0,
 		mouseX: data.mouseX,
 		mouseY: data.mouseY,
@@ -264,7 +264,7 @@ function newCharacter(data, socket){
 		//max amt of ability a character can have
 		max: {
 			health: 10,
-			ammo: 10,
+			ammo: 20,
 			oxygen: 10
 		}
 	});
@@ -580,7 +580,7 @@ io.on("connection", function(socket){
 			if(characters[y].id == data.owner){
 				if(characters[y].ammo >= 1){
 					this.speed = 15;
-					this.size = 5;
+					this.size = 7;
 				  this.dx = characters[y].mouseX - (characters[y].x + characterDimensions.width / 2);
 				  this.dy = characters[y].mouseY - (characters[y].y + characterDimensions.height / 2);
 				  this.mag = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
