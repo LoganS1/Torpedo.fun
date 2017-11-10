@@ -567,7 +567,7 @@ io.on("connection", function(socket){
 		if(!this.found){
 			if(data.name === "" || data.name.length > 12){
 				data.name = "Guest";
-				socket.emit("uh-oh", {error: "Username null or too long, setting default username..."});
+				socket.emit("uh-oh", {error: "Username null or too long, setting default username...", reason: "Username Error"});
 			}
 			newCharacter(data, socket);
 		}
