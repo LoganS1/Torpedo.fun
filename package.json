@@ -1,21 +1,21 @@
 {
-  "name": "dog_fight",
+  "name": "torpedoed.fun",
   "version": "1.0.0",
-  "description": "an io game about the classic dogfighting games",
+  "description": "an io game like the classic dogfighting games",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LoganS1/DogFight.git"
+    "url": "git+https://github.com/LoganS1/Torpedoed.fun.git"
   },
   "author": "Logan Sinclair",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LoganS1/DogFight/issues"
+    "url": "https://github.com/LoganS1/Torpedoed.fun/issues"
   },
-  "homepage": "https://github.com/LoganS1/DogFight#readme",
+  "homepage": "https://github.com/LoganS1/Torpedoed.fun#readme",
   "dependencies": {
     "express": "^4.15.4",
     "http": "0.0.0",
