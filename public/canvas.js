@@ -111,20 +111,15 @@ var bubbleColors = {
   ammo: "purple",
   speed: "blue",
   oxygen: "black",
-  scrap: "rgb(240, 240, 0)"
+  scrap: "brown"
 }
 function drawBubbles(){
   for(var y = bubbles.length - 1; y >= 0; y--){
     if(bubbles[y].status === "scrap"){
       c.beginPath();
       c.fillStyle = bubbleColors[bubbles[y].status];
-      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].size, bubbles[y].size, Math.PI/180, 0, 2*Math.PI);
-      c.fill();
-      c.beginPath();
-      c.ellipse(bubbles[y].x, bubbles[y].y, bubbles[y].size / 1.8, bubbles[y].size / 1.8, Math.PI/180, 0, 2*Math.PI);
-      c.fill();
-      c.strokeStyle = "black";
-      c.stroke();
+      c.fillRect(bubbles[y].x, bubbles[y].y, bubbles[y].size, bubbles[y].size);
+      c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
 
     }else if(bubbles[y].status === "oxygen"){
       c.beginPath();

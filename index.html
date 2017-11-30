@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>torpedoed.fun</title>
+    <title>Torpedoed.fun</title>
     <link rel="stylesheet" href="stylesheet.css" media="screen">
   </head>
   <body>
@@ -20,7 +20,8 @@
       </div>
       <div id="options">
         <h4>Options</h4>
-        <p>Coming Soon!</p>
+        <label>Bubble Names: <input type="checkbox" name="displayBubbleNames" value="true" checked></label> <br />
+        <label>Player Names: <input type="checkbox" name="displayPlayerNames" value="true" checked></label>
       </div>
       <h2 id="died" class="disappear">YOU DIED</h2>
       <h2 id="kills" class="disappear"></h2>
@@ -50,8 +51,9 @@
         <span class="chatMsg">This game is in ALPHA so their may be some buggies to squash and some features to magically create!</span><br />
       </div>
         <input id="chatInput" type="text" name="message" placeholder="Chat Here!" autocomplete="off">
-        <button id="chatButton" onclick="sendMsg();">Send Message</button>
-        <button id="hideChat" onclick="document.getElementById('chat').classList.add('disappear'); document.getElementById('showChat').classList.remove('disappear');">\/</button>
+        <button class="chatButton" onclick="sendMsg();">Send Message</button>
+        <button class="chatButton" onclick="document.getElementById('chatBox').innerHTML = '';">Clear Chat</button>
+        <button class="chatButton" onclick="document.getElementById('chat').classList.add('disappear'); document.getElementById('showChat').classList.remove('disappear');">\/</button>
     </div>
 
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>

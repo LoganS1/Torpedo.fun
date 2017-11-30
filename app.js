@@ -146,6 +146,15 @@ function updateCharacters(){
 		//movement
 		//moves the player to the mouse cordinates.
 		//updating x cordinates
+
+		if(this.currChar.x === "null"){
+			this.currChar.x = Math.random*(800*AmtOfSectionsAcross);
+		}
+
+		if(this.currChar.y=== "null"){
+			this.currChar.y = Math.random*(800*AmtOfSectionsAcross);
+		}
+
 		if(this.currChar.x - 25 < this.currChar.mouseX){
       this.currChar.x += this.currChar.speed * this.noOxygenXSpeed;
     }
@@ -368,8 +377,8 @@ function createBubble(status, useXY, x, y){
 			this.newBubble.x = x + Math.random()*20;
 			this.newBubble.y = y + Math.random()*20;
 		}
+		this.newBubble.size = this.newBubble.size * 2;
 	}
-
 	if(status === "oxygen"){
 		this.newBubble.y = canvasDimensions.height*AmtOfSectionsAcross;
 	}
@@ -525,11 +534,11 @@ io.on("connection", function(socket){
 		for(var x = this.cleanedCharacters.length - 1; x >= 0; x--){
 			//checks if character is me, if so leave in most info
 			if(this.cleanedCharacters[x].id != socket.id){
-				this.cleanedCharacters[x].id = "n/a";
-				this.cleanedCharacters[x].heartbeat = "n/a";
-				this.cleanedCharacters[x].deathID = "n/a";
+				this.cleanedCharacters[x].id = "[redacted]";
+				this.cleanedCharacters[x].heartbeat = "[redacted]";
+				this.cleanedCharacters[x].deathID = "[redacted]";
 			}else{
-				this.cleanedCharacters[x].heartbeat = "n/a";
+				this.cleanedCharacters[x].heartbeat = "[redacted]";
 			}
 
 		}
@@ -674,4 +683,8 @@ function makeID(){
 			return this.id;
 		}
 	}
+}
+
+function debug(message){
+	io.sockets.emit("uh-oh", {error: message, reason: "Debug"});
 }

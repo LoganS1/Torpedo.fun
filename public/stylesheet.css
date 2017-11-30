@@ -169,11 +169,6 @@ h1, h2, h4 {
   float: right;
 }
 
-#chatButton {
-  width: 100%;
-  height: 5%;
-}
-
 .chatMsg {
   color: black;
   margin: 2px 0;
@@ -182,10 +177,7 @@ h1, h2, h4 {
   animation-duration: 0.2s;
 }
 
-.chatName {
-}
-
-#hideChat {
+.chatButton {
   width: 100%;
   height: 5%;
 }

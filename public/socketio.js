@@ -55,3 +55,7 @@ function enter(){
 	  socket.emit("data", {mouseX: mouseX, mouseY: mouseY, name: name});
 	}, 1000/60)
 }
+
+function sendBullet(){
+  socket.emit("bullet", {owner: socket.id, x: mouseX, y: mouseY});
+}

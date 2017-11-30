@@ -33,8 +33,6 @@ function rerollUpgradeBar(){
 	upgradesBar.classList.add("disappear");
 }
 
-
-
 //setting up dimensions to be used in the math of colision detection later
 var canvasDimensions = {
 	height: 800,
@@ -45,20 +43,20 @@ for(var x = upgradeItems.length - 1; x >= 0; x--){
 	upgradeItems[x].addEventListener("click", function(){
 		if(me.scrap >= me.max[this.id] / 2){
 			upgrade(this.id);
+		}else{
+			createMsg("Bank", "red", "You do not have enough scrap!")
 		}
 	})
 }
 
 canvas.addEventListener("click", function(){
-  socket.emit("bullet", {owner: socket.id, x: mouseX, y: mouseY});
+  sendBullet();
 })
 
 window.addEventListener("mousemove", function(e){
 	mouseX = (canvasDimensions.width/canvas.clientWidth) * (e.x - canvas.offsetLeft + canvas.clientWidth * me.section.x) - 10;
 	mouseY = (canvasDimensions.height/canvas.clientHeight) * (e.y - canvas.offsetTop + canvas.clientHeight * me.section.y) - 10;
-    // mouseX = (e.x - ((window.innerWidth / 2) - (canvas.width / 2))) + canvasDimensions.width * me.section.x ;
-    // mouseY = ((e.y) + canvasDimensions.height * (canvasDimensions.height/canvas.clientHeight) * me.section.y) - canvas.offsetTop;
-  })
+})
 
 function loop(){
 	findMe();
