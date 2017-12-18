@@ -147,12 +147,12 @@ function updateCharacters(){
 		//moves the player to the mouse cordinates.
 		//updating x cordinates
 
-		if(this.currChar.x === "null"){
-			this.currChar.x = Math.random*(800*AmtOfSectionsAcross);
+		if(!this.currChar.x && this.currChar.x != 0){
+			this.currChar.x = Math.random()*(800*AmtOfSectionsAcross);
 		}
 
-		if(this.currChar.y=== "null"){
-			this.currChar.y = Math.random*(800*AmtOfSectionsAcross);
+		if(!this.currChar.y && this.currChar.y != 0){
+			this.currChar.y = Math.random()*(800*AmtOfSectionsAcross);
 		}
 
 		if(this.currChar.x - 25 < this.currChar.mouseX){

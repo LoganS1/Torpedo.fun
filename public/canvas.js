@@ -18,6 +18,7 @@ function drawUI(){
     this.currChar = characters[t];
 
 //draw leaderboard
+  if(options.names.players){
     c.beginPath();
     c.font = "16px Arial";
     c.fillStyle = "black";
@@ -28,6 +29,7 @@ function drawUI(){
     if(this.currChar.timers.speed > 0){
       c.fillText("-Speed: " + this.currChar.timers.speed, this.currChar.x, this.currChar.y - 70);
     }
+  }
 
 //draw character bars
     this.oxygenBarValue = (50 / (this.currChar.max.oxygen)) * this.currChar.timers.oxygen;
@@ -105,37 +107,36 @@ function drawCharacters(){
 }
 
 /*----------Bubbles----------*/
-var bubbleColors = {
-  damage: "red",
-  health: "green",
-  ammo: "purple",
-  speed: "blue",
-  oxygen: "black",
-  scrap: "brown"
-}
+
 function drawBubbles(){
   for(var y = bubbles.length - 1; y >= 0; y--){
     if(bubbles[y].status === "scrap"){
       c.beginPath();
-      c.fillStyle = bubbleColors[bubbles[y].status];
+      c.fillStyle = options.bubbleColors[bubbles[y].status];
       c.fillRect(bubbles[y].x, bubbles[y].y, bubbles[y].size, bubbles[y].size);
-      c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      if(options.names.bubbles){
+        c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      }
 
     }else if(bubbles[y].status === "oxygen"){
       c.beginPath();
-      c.strokeStyle = bubbleColors[bubbles[y].status];
+      c.strokeStyle = options.bubbleColors[bubbles[y].status];
       c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
       c.stroke();
       c.beginPath();
-      c.fillStyle = bubbleColors[bubbles[y].status];
-      c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      c.fillStyle = options.bubbleColors[bubbles[y].status];
+      if(options.names.bubbles){
+        c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      }
       c.fill();
 
     }else{
       c.beginPath()
-      c.fillStyle = bubbleColors[bubbles[y].status];
+      c.fillStyle = options.bubbleColors[bubbles[y].status];
       c.arc(bubbles[y].x, bubbles[y].y, bubbles[y].size, 0, 2*Math.PI);
-      c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      if(options.names.bubbles){
+        c.fillText(bubbles[y].status, bubbles[y].x + bubbles[y].size, bubbles[y].y);
+      }
       c.fill();
     }
 
@@ -152,6 +153,7 @@ function drawBullets(){
   }
 }
 
+/*----------MiniMap----------*/
 function drawMiniMap(){
   this.xOffSet = 20;
   this.yOffSet = 20;
@@ -180,8 +182,8 @@ function drawMiniMap(){
 
   for(var y = characters.length - 1; y >= 0; y--){
     c.beginPath();
-    c.fillStyle = "rgba(255, 0, 0, 0.2)";
-    if(characters[y].id != "n/a"){
+      c.fillStyle = "rgba(255, 0, 0, 0.2)"
+    if(characters[y].id != "[redacted]"){
       //this checks if current character is "me"
       c.fillStyle = "rgba(0, 0, 255, 0.5)";
     }

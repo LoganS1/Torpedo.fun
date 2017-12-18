@@ -35,12 +35,13 @@ html, body {
   left: 10%;
   top: 10%;
   border-radius: 10px;
+  overflow: scroll;
 }
 
 #input{
   width: 50%;
-  height: 5%;
-  margin: 5% 25% 0 25%;
+  height: 30px;
+  margin: 10px 25% 0 25%;
   border: 0.5px solid darkgrey;
   border-radius: 0;
   text-align: center;
@@ -55,8 +56,8 @@ html, body {
 #enter{
   background-color: lightblue;
   width: 20%;
-  height: 5%;
-  margin: 10px 40%;
+  height: 30px;
+  margin: 5px 40%;
   font-size: 1.5em;
 }
 
@@ -156,7 +157,7 @@ h1, h2, h4 {
   margin: 0 auto;
   padding: 5px;
   width: 97%;
-  height: 75%;
+  height: 70%;
   float: right;
   overflow-y: scroll;
 }

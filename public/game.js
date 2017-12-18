@@ -1,7 +1,5 @@
 var input = document.getElementById("input");
 var splash = document.getElementById("splash");
-var died = document.getElementById("died");
-var kills = document.getElementById("kills");
 var upgradesBar = document.getElementById("upgradesBar");
 var healthCost = document.getElementById("healthCost");
 var oxygenCost = document.getElementById("oxygenCost");
@@ -11,6 +9,9 @@ var upgradeList = document.getElementById("upgradeList");
 var chat = document.getElementById("chat");
 var chatInput = document.getElementById("chatInput");
 var chatBox = document.getElementById("chatBox");
+var playerNamesBox = document.getElementById("displayPlayerNames");
+var bubbleNamesBox = document.getElementById("displayBubbleNames");
+var displayChat = document.getElementById("displayChat");
 
 var name;
 var me;
@@ -22,6 +23,28 @@ var bubbles = [];
 var started = false;
 var characterDimensions;
 var AmtOfSectionsAcross;
+
+if(window.innerHeight < 500 || window.innerWidth < 600){
+	alert("Sorry, a bigger screen size is recommended for playing this game!");
+}
+
+var options = {
+	bubbleColors: {
+	  damage: "red",
+	  health: "green",
+	  ammo: "purple",
+	  speed: "blue",
+	  oxygen: "black",
+	  scrap: "brown"
+	},
+	names: {
+		bubbles: true,
+		players: true
+	},
+	minimap: {
+		color: "red"
+	}
+}
 
 function unrollUpgradeBar(){
 	upgradeList.classList.remove("disappear");
@@ -122,4 +145,18 @@ function createMsg(name, color, message){
   chatBox.append(this.nameSpan);
   chatBox.append(document.createElement("br"));
   chatBox.scrollTo(0, 100000);
+}
+
+function enter(){
+  name = input.value;
+  splash.classList.add("disappear");
+	if(displayChat.checked){
+  	chat.classList.remove("disappear");
+	}
+  if(name === ""){
+    name = "Guest";
+	}
+	options.names.players = playerNamesBox.checked;
+	options.names.bubbles = bubbleNamesBox.checked;
+	sendData();
 }
