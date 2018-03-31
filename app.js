@@ -5,8 +5,8 @@ var express = require("express"),
 	io 				= require("socket.io")(server);
 
 //setting up server to listen
-server.listen(8080, function(){
-	process.stdout.write("\033c");
+server.listen(3000, function(){
+	console.log("Torpedoed.fun running on port 3000");
 });
 
 //tells express to send index.html to root of website
@@ -50,7 +50,7 @@ function loop() {
 	characterCollisionDetection();
 	bubbleCollisionDetection();
 	bulletCollisionDetection();
-	updateConsole();
+	// updateConsole(); Too much spam in log files in production
 	removeTheDead();;
 	adjustLoopInterval();
 	fps = FPS.getFPS();
